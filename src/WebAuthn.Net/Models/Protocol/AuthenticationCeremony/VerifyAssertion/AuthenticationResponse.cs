@@ -9,10 +9,10 @@ namespace WebAuthn.Net.Models.Protocol.AuthenticationCeremony.VerifyAssertion;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#iface-pkcredential">Web Authentication: An API for accessing Public Key Credentials Level 3 - §5.1. PublicKeyCredential Interface</a>
+///         <a href="https://www.w3.org/TR/webauthn-3/#iface-pkcredential">Web Authentication: An API for accessing Public Key Credentials Level 3 - PublicKeyCredential Interface</a>
 ///     </para>
 ///     <para>
-///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-public-key-easy">Web Authentication: An API for accessing Public Key Credentials Level 3 - §5.2.1.1 Easily accessing credential data</a>
+///         <a href="https://www.w3.org/TR/webauthn-3/#sctn-public-key-easy">Web Authentication: An API for accessing Public Key Credentials Level 3 - Easily accessing credential data</a>
 ///     </para>
 /// </remarks>
 public class AuthenticationResponse
