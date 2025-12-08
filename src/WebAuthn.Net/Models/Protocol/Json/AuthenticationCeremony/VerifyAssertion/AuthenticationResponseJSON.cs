@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace WebAuthn.Net.Models.Protocol.Json.AuthenticationCeremony.VerifyAssertion;
 
 /// <summary>
-///     PublicKeyCredential
+///     PublicKeyCredential. The response received from the authenticator during the authentication ceremony.
 /// </summary>
 /// <remarks>
 ///     <para>
