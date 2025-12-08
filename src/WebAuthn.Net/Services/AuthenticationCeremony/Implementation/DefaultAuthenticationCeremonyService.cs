@@ -655,33 +655,33 @@ public class DefaultAuthenticationCeremonyService<TContext> : IAuthenticationCer
                 }
             }
 
-            // 25. If 'response.attestationObject' is present and the Relying Party wishes to verify the attestation
-            // then perform CBOR decoding on attestationObject to obtain the attestation statement format 'fmt', and the attestation statement 'attStmt'.
-            if (response.AttestationObject is not null)
-            {
-                var attestationObjectResult = AttestationObjectDecoder.Decode(response.AttestationObject);
-                if (attestationObjectResult.HasError)
-                {
-                    Logger.AttestationObjectDecodeFailed();
-                    Counters.IncrementCompleteCeremonyEnd(false);
-                    return Result<CompleteAuthenticationCeremonyResult>.Fail();
-                }
-
-                var attestationObjectValid = await VerifyAttestationObjectAsync(
-                    context,
-                    authData,
-                    credentialRecordPublicKey,
-                    credentialRecord.Id,
-                    attestationObjectResult.Ok,
-                    hash,
-                    cancellationToken);
-                if (!attestationObjectValid)
-                {
-                    Logger.AttestationObjectVerificationFailed();
-                    Counters.IncrementCompleteCeremonyEnd(false);
-                    return Result<CompleteAuthenticationCeremonyResult>.Fail();
-                }
-            }
+            // // 25. If 'response.attestationObject' is present and the Relying Party wishes to verify the attestation
+            // // then perform CBOR decoding on attestationObject to obtain the attestation statement format 'fmt', and the attestation statement 'attStmt'.
+            // if (response.AttestationObject is not null)
+            // {
+            //     var attestationObjectResult = AttestationObjectDecoder.Decode(response.AttestationObject);
+            //     if (attestationObjectResult.HasError)
+            //     {
+            //         Logger.AttestationObjectDecodeFailed();
+            //         Counters.IncrementCompleteCeremonyEnd(false);
+            //         return Result<CompleteAuthenticationCeremonyResult>.Fail();
+            //     }
+            //
+            //     var attestationObjectValid = await VerifyAttestationObjectAsync(
+            //         context,
+            //         authData,
+            //         credentialRecordPublicKey,
+            //         credentialRecord.Id,
+            //         attestationObjectResult.Ok,
+            //         hash,
+            //         cancellationToken);
+            //     if (!attestationObjectValid)
+            //     {
+            //         Logger.AttestationObjectVerificationFailed();
+            //         Counters.IncrementCompleteCeremonyEnd(false);
+            //         return Result<CompleteAuthenticationCeremonyResult>.Fail();
+            //     }
+            // }
 
             // 26. Update credentialRecord with new state values:
             // - Update 'credentialRecord.signCount' to the value of 'authData.signCount'.
@@ -697,7 +697,6 @@ public class DefaultAuthenticationCeremonyService<TContext> : IAuthenticationCer
                 authData.SignCount,
                 currentBs,
                 uvInitialized,
-                response.AttestationObject,
                 response.ClientDataJson);
 
             var updatedCredential = new UserCredentialRecord(
@@ -763,7 +762,6 @@ public class DefaultAuthenticationCeremonyService<TContext> : IAuthenticationCer
     ///     Updated value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags-uv">user verified (UV)</a> flag. Will be non-null only if
     ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#user-verification">user verification</a> is <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-userverificationrequirement-required">required</a> for the authentication ceremony.
     /// </param>
-    /// <param name="responseAttestationObject">The raw value of <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-object">attestationObject</a> obtained during the authentication ceremony.</param>
     /// <param name="responseClientDataJson">The raw value of <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-authenticatorresponse-clientdatajson">clientDataJSON</a> obtained during the authentication ceremony.</param>
     /// <returns>The result of updating the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-record">credentialRecord</a>.</returns>
     protected virtual CredentialRecordUpdateResult UpdateCredentialRecord(
@@ -771,18 +769,17 @@ public class DefaultAuthenticationCeremonyService<TContext> : IAuthenticationCer
         uint authDataSignCount,
         bool currentBs,
         bool? uvInitialized,
-        byte[]? responseAttestationObject,
         byte[]? responseClientDataJson)
     {
         ArgumentNullException.ThrowIfNull(old);
         var attestationObject = old.AttestationObject;
         var attestationClientDataJson = old.AttestationClientDataJSON;
 
-        if (responseAttestationObject is not null && responseClientDataJson is not null)
-        {
-            attestationObject = responseAttestationObject;
-            attestationClientDataJson = responseClientDataJson;
-        }
+        // if (responseAttestationObject is not null && responseClientDataJson is not null)
+        // {
+        //     attestationObject = responseAttestationObject;
+        //     attestationClientDataJson = responseClientDataJson;
+        // }
 
         var userVerificationFlagMayBeUpdatedToTrue = !old.UvInitialized && uvInitialized.HasValue && uvInitialized.Value;
 
