@@ -204,7 +204,7 @@ public class DefaultPublicKeyCredentialCreationOptionsEncoder
             }
         }
 
-        return new(id, type, transports);
+        return new(type, id, transports);
     }
 
     private AuthenticatorSelectionCriteriaJSON? EncodeAuthenticatorSelection(AuthenticatorSelectionCriteria? authenticatorSelection)

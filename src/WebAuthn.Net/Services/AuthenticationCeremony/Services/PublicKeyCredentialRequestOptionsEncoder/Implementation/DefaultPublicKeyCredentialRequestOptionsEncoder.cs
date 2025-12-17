@@ -132,7 +132,7 @@ public class DefaultPublicKeyCredentialRequestOptionsEncoder : IPublicKeyCredent
             }
         }
 
-        return new(id, type, transports);
+        return new(type, id, transports);
     }
 
     /// <summary>
