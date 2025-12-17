@@ -20,7 +20,11 @@ public static class X509CertificateInMemoryLoader
         X509Certificate2? cert = null;
         try
         {
+#if NET8_0
+            cert = new(bytes, (string?) null, X509KeyStorageFlags.EphemeralKeySet);
+#else
             cert = X509CertificateLoader.LoadCertificate(bytes);
+#endif
             if (cert.GetRSAPublicKey() is { } rsaPublicKey)
             {
                 rsaPublicKey.Dispose();
