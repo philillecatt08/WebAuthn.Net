@@ -3,11 +3,11 @@
 namespace WebAuthn.Net.Services.Serialization.Cose.Models.Enums;
 
 /// <summary>
-///     Cryptographic Algorithm Identifier.
+///     Cryptographic Algorithm Identifier (typedef COSEAlgorithmIdentifier)
 /// </summary>
 /// <remarks>
 ///     <para>
-///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-alg-identifier">Web Authentication: An API for accessing Public Key Credentials Level 3 - §5.8.5. Cryptographic Algorithm Identifier</a>
+///         <a href="https://www.w3.org/TR/webauthn-3/#sctn-alg-identifier">Web Authentication: An API for accessing Public Key Credentials Level 3 - Cryptographic Algorithm Identifier (typedef COSEAlgorithmIdentifier)</a>
 ///     </para>
 ///     <para>
 ///         <a href="https://www.iana.org/assignments/cose/cose.xhtml#algorithms">COSE Algorithms</a>
