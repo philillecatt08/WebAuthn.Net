@@ -6,18 +6,16 @@ using WebAuthn.Net.Services.Serialization.Cbor.Models.Tree;
 namespace WebAuthn.Net.Services.Common.AttestationObjectDecoder.Models;
 
 /// <summary>
-///     Decoded <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-object">attestationObject</a>.
+///     Decoded <a href="https://www.w3.org/TR/webauthn-3/#attestation-object">attestationObject</a>.
 /// </summary>
 public class AttestationObject
 {
     /// <summary>
     ///     Constructs <see cref="AttestationObject" />.
     /// </summary>
-    /// <param name="fmt">
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement-format">Attestation statement format (fmt)</a>.
-    /// </param>
-    /// <param name="attStmt"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">Attestation statement (attStmt)</a>.</param>
-    /// <param name="authData"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">Authenticator data (authData)</a>. May be <see langword="null" />.</param>
+    /// <param name="fmt"><a href="https://www.w3.org/TR/webauthn-3/#attestation-statement-format">Attestation statement format (fmt)</a>.</param>
+    /// <param name="attStmt"><a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">Attestation statement (attStmt)</a>.</param>
+    /// <param name="authData"><a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">Authenticator data (authData)</a>. May be <see langword="null" />.</param>
     /// <exception cref="InvalidEnumArgumentException"><paramref name="fmt" /> contains a value that is not defined in <see cref="AttestationStatementFormat" /></exception>
     /// <exception cref="ArgumentNullException"><paramref name="attStmt" /> is <see langword="null" /></exception>
     public AttestationObject(
@@ -42,17 +40,17 @@ public class AttestationObject
     }
 
     /// <summary>
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement-format">Attestation statement format (fmt)</a>.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement-format">Attestation statement format (fmt)</a>.
     /// </summary>
     public AttestationStatementFormat Fmt { get; }
 
     /// <summary>
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">Attestation statement (attStmt)</a>.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">Attestation statement (attStmt)</a>.
     /// </summary>
     public CborMap AttStmt { get; }
 
     /// <summary>
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">Authenticator data (authData)</a>. May be <see langword="null" />.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">Authenticator data (authData)</a>. May be <see langword="null" />.
     /// </summary>
     public byte[]? AuthData { get; }
 }
