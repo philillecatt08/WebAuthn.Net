@@ -25,28 +25,28 @@ public class MySqlUserCredentialRecord
     public byte[] Id { get; set; } = null!;
 
     /// <summary>
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#rp-id">RP ID</a> to which the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-record">credential record</a> is bound.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#rp-id">RP ID</a> to which the <a href="https://www.w3.org/TR/webauthn-3/#credential-record">credential record</a> is bound.
     /// </summary>
     [Required]
     [MaxLength(256)]
     public string RpId { get; set; } = null!;
 
     /// <summary>
-    ///     Unique user account identifier to which the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-record">credential record</a> is bound.
+    ///     Unique user account identifier to which the <a href="https://www.w3.org/TR/webauthn-3/#credential-record">credential record</a> is bound.
     /// </summary>
     [Required]
     [MaxLength(128)]
     public byte[] UserHandle { get; set; } = null!;
 
     /// <summary>
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-id">Credential ID</a> of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#credential-id">Credential ID</a> of the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a>.
     /// </summary>
     [Required]
     [MaxLength(1024)]
     public byte[] CredentialId { get; set; } = null!;
 
     /// <summary>
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source-type">type</a> of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source-type">type</a> of the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a>.
     /// </summary>
     public int Type { get; set; }
 
@@ -107,57 +107,55 @@ public class MySqlUserCredentialRecord
     public byte[]? OkpX { get; set; }
 
     /// <summary>
-    ///     The latest value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-signcount">signature counter</a> in the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">authenticator data</a> from any
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#ceremony">ceremony</a> using the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a>.
+    ///     The latest value of the <a href="https://www.w3.org/TR/webauthn-3/#authdata-signcount">signature counter</a> in the <a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">authenticator data</a> from any
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#ceremony">ceremony</a> using the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a>.
     /// </summary>
     public uint SignCount { get; set; }
 
     /// <summary>
-    ///     The value returned from <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-authenticatorattestationresponse-gettransports">getTransports()</a> when the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a> was <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#registration">registered</a>.
-    /// </summary>
-    /// <remarks>
     ///     <para>
-    ///         Modifying or removing <a href="https://infra.spec.whatwg.org/#list-item">items</a> from the value returned from <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-authenticatorattestationresponse-gettransports">getTransports()</a> could negatively impact
-    ///         user experience, or even prevent use of the corresponding credential.
+    ///         The value returned from <a href="https://www.w3.org/TR/webauthn-3/#dom-authenticatorattestationresponse-gettransports">getTransports()</a> when the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a> was
+    ///         <a href="https://www.w3.org/TR/webauthn-3/#registration">registered</a>.
     ///     </para>
     ///     <para>For storage in MySQL, the values are transformed into json ('json' data type).</para>
+    /// </summary>
+    /// <remarks>
+    ///     Modifying or removing <a href="https://infra.spec.whatwg.org/#list-item">items</a> from the value returned from <a href="https://www.w3.org/TR/webauthn-3/#dom-authenticatorattestationresponse-gettransports">getTransports()</a> could negatively impact user experience, or even
+    ///     prevent use of the corresponding credential.
     /// </remarks>
     [Column(TypeName = "json")]
     [Required]
     public string Transports { get; set; } = null!;
 
     /// <summary>
-    ///     A Boolean value indicating whether any <a href="https://w3c.github.io/webappsec-credential-management/#concept-credential">credential</a> from this <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a> has
-    ///     had the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags-uv">UV</a> <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags">flag</a> set.
+    ///     A Boolean value indicating whether any <a href="https://www.w3.org/TR/credential-management-1/#concept-credential">credential</a> from this <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a> has had the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-uv">UV</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags">flag</a> set.
     /// </summary>
     public bool UvInitialized { get; set; }
 
     /// <summary>
-    ///     The value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags-be">BE</a> <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags">flag</a> when the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a> was created.
+    ///     The value of the <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-be">BE</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags">flag</a> when the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a> was
+    ///     created.
     /// </summary>
     public bool BackupEligible { get; set; }
 
     /// <summary>
-    ///     The latest value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags-bs">BS</a> <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags">flag</a> in the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">authenticator data</a> from any <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#ceremony">ceremony</a> using the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a>.
+    ///     The latest value of the <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-bs">BS</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags">flag</a> in the <a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">authenticator data</a> from any
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#ceremony">ceremony</a> using the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a>.
     /// </summary>
     public bool BackupState { get; set; }
 
     /// <summary>
-    ///     OPTIONAL. The value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-authenticatorattestationresponse-attestationobject">attestationObject</a> attribute when the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential</a> source was <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#registration">registered</a>. Storing this enables the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> to reference the credential's <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">attestation statement</a> at a later time.
+    ///     OPTIONAL. The value of the <a href="https://www.w3.org/TR/webauthn-3/#dom-authenticatorattestationresponse-attestationobject">attestationObject</a> attribute when the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a>
+    ///     was <a href="https://www.w3.org/TR/webauthn-3/#registration">registered</a>. Storing this enables the <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> to reference the credential’s
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">attestation statement</a> at a later time.
     /// </summary>
     public byte[]? AttestationObject { get; set; }
 
     /// <summary>
-    ///     OPTIONAL. The value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-authenticatorresponse-clientdatajson">clientDataJSON</a> attribute when the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#public-key-credential-source">public key credential source</a> was <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#registration">registered</a>. Storing this in combination with the above
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#abstract-opdef-credential-record-attestationobject">attestationObject</a> <a href="https://infra.spec.whatwg.org/#struct-item">item</a> enables the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> to re-verify the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-signature">attestation signature</a> at a later time.
+    ///     OPTIONAL. The value of the <a href="https://www.w3.org/TR/webauthn-3/#dom-authenticatorresponse-clientdatajson">clientDataJSON</a> attribute when the <a href="https://www.w3.org/TR/webauthn-3/#public-key-credential-source">public key credential source</a> was
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#registration">registered</a>. Storing this in combination with the above <a href="https://www.w3.org/TR/webauthn-3/#abstract-opdef-credential-record-attestationobject">attestationObject</a>
+    ///     <a href="https://infra.spec.whatwg.org/#struct-item">item</a> enables the <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> to re-verify the <a href="https://www.w3.org/TR/webauthn-3/#attestation-signature">attestation signature</a> at a later time.
     /// </summary>
     public byte[]? AttestationClientDataJson { get; set; }
 
@@ -168,12 +166,12 @@ public class MySqlUserCredentialRecord
     public string? Description { get; set; }
 
     /// <summary>
-    ///     Creation date of the credential record in unixtime seconds format.
+    ///     Unix timestamp (in seconds) of when the credential record was created.
     /// </summary>
     public long CreatedAtUnixTime { get; set; }
 
     /// <summary>
-    ///     Credential record update date in unixtime seconds format.
+    ///     Unix timestamp (in seconds) of when the credential record was last updated.
     /// </summary>
     public long UpdatedAtUnixTime { get; set; }
 
