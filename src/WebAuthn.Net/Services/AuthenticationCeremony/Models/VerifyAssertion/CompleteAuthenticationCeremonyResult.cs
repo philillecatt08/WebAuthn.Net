@@ -14,10 +14,8 @@ public class CompleteAuthenticationCeremonyResult
     /// <param name="recommendedActions">Actions recommended to be taken following a successful authentication ceremony, depending on the credential backup state.</param>
     /// <param name="userVerificationFlagMayBeUpdatedToTrue">
     ///     <para>
-    ///         A flag referring to the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authn-ceremony-update-credential-record">26.3 step of the authentication ceremony</a>: "If credentialRecord.
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#abstract-opdef-credential-record-uvinitialized">uvInitialized</a> is <see langword="false" />, update it to the value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags-uv">UV</a>
-    ///         bit in the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags">flags</a> in authData. This change SHOULD require authorization by an additional <a href="https://pages.nist.gov/800-63-3/sp800-63-3.html#af">authentication factor</a> equivalent to
-    ///         WebAuthn <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#user-verification">user verification</a>; if not authorized, skip this step.".
+    ///         A flag referring to the <a href="https://www.w3.org/TR/webauthn-3/#authn-ceremony-update-credential-record">step of the authentication ceremony</a>: "If credentialRecord.uvInitialized is <see langword="false" />, update it to the value of the UV bit in the flags in
+    ///         authData. This change SHOULD require authorization by an additional authentication factor equivalent to WebAuthn user verification; if not authorized, skip this step".
     ///     </para>
     ///     <para>
     ///         If the property contains <see langword="true" />, this means that during the authentication ceremony, it was established that the current stored value of credentialRecord.uvInitialized is <see langword="false" />, but the authenticator's response reported it has become
@@ -45,10 +43,8 @@ public class CompleteAuthenticationCeremonyResult
 
     /// <summary>
     ///     <para>
-    ///         A flag referring to the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authn-ceremony-update-credential-record">26.3 step of the authentication ceremony</a>: "If credentialRecord.
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#abstract-opdef-credential-record-uvinitialized">uvInitialized</a> is <see langword="false" />, update it to the value of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags-uv">UV</a>
-    ///         bit in the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-flags">flags</a> in authData. This change SHOULD require authorization by an additional <a href="https://pages.nist.gov/800-63-3/sp800-63-3.html#af">authentication factor</a> equivalent to
-    ///         WebAuthn <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#user-verification">user verification</a>; if not authorized, skip this step.".
+    ///         A flag referring to the <a href="https://www.w3.org/TR/webauthn-3/#authn-ceremony-update-credential-record">step of the authentication ceremony</a>: "If credentialRecord.uvInitialized is <see langword="false" />, update it to the value of the UV bit in the flags in
+    ///         authData. This change SHOULD require authorization by an additional authentication factor equivalent to WebAuthn user verification; if not authorized, skip this step".
     ///     </para>
     ///     <para>
     ///         If the property contains <see langword="true" />, this means that during the authentication ceremony, it was established that the current stored value of credentialRecord.uvInitialized is <see langword="false" />, but the authenticator's response reported it has become
