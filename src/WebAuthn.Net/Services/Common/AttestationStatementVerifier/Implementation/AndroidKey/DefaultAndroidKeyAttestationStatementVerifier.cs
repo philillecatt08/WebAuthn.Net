@@ -96,15 +96,15 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
         byte[] clientDataHash,
         CancellationToken cancellationToken)
     {
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-key-attestation
-        // §8.4. Android Key Attestation Statement Format
+        // https://www.w3.org/TR/webauthn-3/#sctn-android-key-attestation
+        // Android Key Attestation Statement Format
 
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(attStmt);
         ArgumentNullException.ThrowIfNull(authenticatorData);
         // 1) Verify that 'attStmt' is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
         // 2) Verify that 'sig' is a valid signature over the concatenation of 'authenticatorData' and 'clientDataHash'
-        // using the public key in the first certificate in x5c with the algorithm specified in alg.
+        // using the public key in the first certificate in 'x5c' with the algorithm specified in 'alg'.
         var certificatesToDispose = new List<X509Certificate2>(attStmt.X5C.Length);
         try
         {
@@ -139,13 +139,15 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 3) Verify that the public key in the first certificate in 'x5c' matches the 'credentialPublicKey' in the 'attestedCredentialData' in 'authenticatorData'.
+            // 3) Verify that the public key in the first certificate in 'x5c'
+            // matches the 'credentialPublicKey' in the 'attestedCredentialData' in 'authenticatorData'.
             if (!authenticatorData.AttestedCredentialData.CredentialPublicKey.Matches(credCert))
             {
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 4) Verify that the 'attestationChallenge' field in the attestation certificate extension data is identical to 'clientDataHash'.
+            // 4) Verify that the 'attestationChallenge' field in the attestation certificate extension data
+            // is identical to 'clientDataHash'.
             if (!TryGetKeyDescriptionAttestationExtension(credCert, out var keyDescription))
             {
                 return Result<VerifiedAttestationStatement>.Fail();
@@ -161,13 +163,15 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 5) Verify the following using the appropriate authorization list from the attestation certificate extension data:
+            // 5) Verify the following using the appropriate authorization list
+            // from the attestation certificate extension data:
             if (!VerifyAuthorizationLists(keyDescription))
             {
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 6) If successful, return implementation-specific values representing attestation type Basic and attestation trust path 'x5c'.
+            // 6) If successful, return implementation-specific values
+            // representing attestation type Basic and attestation trust path 'x5c'.
             var acceptableTrustAnchorsResult = await GetAcceptableTrustAnchorsAsync(
                 context,
                 credCert,
@@ -317,7 +321,8 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
         }
 
         // 1) The AuthorizationList.allApplications field is not present
-        // on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
+        // on either authorization list (softwareEnforced nor teeEnforced),
+        // since PublicKeyCredential MUST be scoped to the RP ID.
         if (IsAllApplicationsPresent(softwareEnforced))
         {
             return false;
@@ -330,7 +335,7 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
 
         // 2) For the following, use only the teeEnforced authorization list
         // if the RP wants to accept only keys from a trusted execution environment,
-        // otherwise use the union of teeEnforced and softwareEnforced.
+        // otherwise use the union of 'teeEnforced' and 'softwareEnforced'.
         //  - The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
         //  - The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
         var shouldAcceptKeysOnlyFromTrustedExecutionEnvironment = Options.CurrentValue.AttestationStatements.AndroidKey.AcceptKeysOnlyFromTrustedExecutionEnvironment;
