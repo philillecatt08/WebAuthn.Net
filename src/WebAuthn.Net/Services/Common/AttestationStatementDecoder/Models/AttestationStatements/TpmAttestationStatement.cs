@@ -6,7 +6,7 @@ using WebAuthn.Net.Services.Serialization.Cose.Models.Enums;
 namespace WebAuthn.Net.Services.Common.AttestationStatementDecoder.Models.AttestationStatements;
 
 /// <summary>
-///     Decoded <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-attestation">TPM attestation statement</a>.
+///     Decoded <a href="https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation">TPM attestation statement</a>.
 /// </summary>
 public class TpmAttestationStatement : AbstractAttestationStatement
 {
@@ -15,11 +15,14 @@ public class TpmAttestationStatement : AbstractAttestationStatement
     /// </summary>
     /// <param name="ver">The version of the TPM specification to which the signature conforms.</param>
     /// <param name="alg">
-    ///     A <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#typedefdef-cosealgorithmidentifier">COSEAlgorithmIdentifier</a> containing the identifier of the algorithm used to generate the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-signature">attestation signature</a>
+    ///     A <a href="https://www.w3.org/TR/webauthn-3/#typedefdef-cosealgorithmidentifier">COSEAlgorithmIdentifier</a> containing the identifier of the algorithm used to generate the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#attestation-signature">attestation signature</a>.
     /// </param>
     /// <param name="x5C">aikCert followed by its certificate chain, in X.509 encoding.</param>
-    /// <param name="sig">The attestation signature, in the form of a TPMT_SIGNATURE structure as specified in <a href="https://trustedcomputinggroup.org/resource/tpm-library-specification/">[TPMv2-Part2]</a> section 11.3.4.</param>
+    /// <param name="sig">
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#attestation-signature">attestation signature</a>, in the form of a TPMT_SIGNATURE structure as specified in <a href="https://trustedcomputinggroup.org/resource/tpm-library-specification/">[TPMv2-Part2]</a> section
+    ///     11.3.4.
+    /// </param>
     /// <param name="certInfo">The TPMS_ATTEST structure over which the above signature was computed, as specified in <a href="https://trustedcomputinggroup.org/resource/tpm-library-specification/">[TPMv2-Part2]</a> section 10.12.12.</param>
     /// <param name="pubArea">The TPMT_PUBLIC structure (see <a href="https://trustedcomputinggroup.org/resource/tpm-library-specification/">[TPMv2-Part2]</a> section 12.2.4) used by the TPM to represent the credential public key.</param>
     /// <exception cref="ArgumentNullException"><paramref name="ver" /> is <see langword="null" /></exception>
@@ -78,8 +81,7 @@ public class TpmAttestationStatement : AbstractAttestationStatement
     public string Ver { get; }
 
     /// <summary>
-    ///     A <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#typedefdef-cosealgorithmidentifier">COSEAlgorithmIdentifier</a> containing the identifier of the algorithm used to generate the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-signature">attestation signature</a>
+    ///     A <a href="https://www.w3.org/TR/webauthn-3/#typedefdef-cosealgorithmidentifier">COSEAlgorithmIdentifier</a> containing the identifier of the algorithm used to generate the <a href="https://www.w3.org/TR/webauthn-3/#attestation-signature">attestation signature</a>.
     /// </summary>
     public CoseAlgorithm Alg { get; }
 
@@ -89,7 +91,7 @@ public class TpmAttestationStatement : AbstractAttestationStatement
     public byte[][] X5C { get; }
 
     /// <summary>
-    ///     The attestation signature, in the form of a TPMT_SIGNATURE structure as specified in <a href="https://trustedcomputinggroup.org/resource/tpm-library-specification/">[TPMv2-Part2]</a> section 11.3.4.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#attestation-signature">attestation signature</a>, in the form of a TPMT_SIGNATURE structure as specified in <a href="https://trustedcomputinggroup.org/resource/tpm-library-specification/">[TPMv2-Part2]</a> section 11.3.4.
     /// </summary>
     public byte[] Sig { get; }
 
