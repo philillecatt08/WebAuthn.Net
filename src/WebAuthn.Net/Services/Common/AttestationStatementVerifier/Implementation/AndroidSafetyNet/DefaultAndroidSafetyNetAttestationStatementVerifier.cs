@@ -78,8 +78,8 @@ public class DefaultAndroidSafetyNetAttestationStatementVerifier<TContext>
         byte[] clientDataHash,
         CancellationToken cancellationToken)
     {
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-safetynet-attestation
-        // §8.5. Android SafetyNet Attestation Statement Format
+        // https://www.w3.org/TR/webauthn-3/#sctn-android-safetynet-attestation
+        // "Android SafetyNet Attestation Statement Format"
 
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(attStmt);
@@ -228,7 +228,7 @@ public class DefaultAndroidSafetyNetAttestationStatementVerifier<TContext>
     /// </summary>
     /// <param name="context">The context in which the WebAuthn operation is performed.</param>
     /// <param name="attestationCert">The leaf certificate from the certificate chain of the JWS message of the Android SafetyNet attestation statement.</param>
-    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
+    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/webauthn-3/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/webauthn-3/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
     /// <param name="cancellationToken">Cancellation token for an asynchronous operation.</param>
     /// <returns>If the collection of root certificates was successfully formed, the result contains <see cref="UniqueByteArraysCollection" />, otherwise the result indicates that there was an error during the collection formation process.</returns>
     protected virtual async Task<Result<UniqueByteArraysCollection>> GetAcceptableTrustAnchorsAsync(
@@ -300,10 +300,10 @@ public class DefaultAndroidSafetyNetAttestationStatementVerifier<TContext>
     }
 
     /// <summary>
-    ///     Returns X509v3 certificates from the header of the JWS token of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
+    ///     Returns X509v3 certificates from the header of the JWS token of the <a href="https://www.w3.org/TR/webauthn-3/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
     /// </summary>
     /// <param name="jwt">
-    ///     JWT (JWS) token of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
+    ///     JWT (JWS) token of the <a href="https://www.w3.org/TR/webauthn-3/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
     /// </param>
     /// <param name="rawCertificates">Output parameter. If the method returns <see langword="true" /> - contains X509v3 certificates in the order they appear in the JWS token header, if the method return <see langword="false" />, contains <see langword="null" />.</param>
     /// <returns>If the extraction of certificates from the header was successful, returns <see langword="true" />, otherwise, returns <see langword="false" />. </returns>
@@ -403,7 +403,7 @@ public class DefaultAndroidSafetyNetAttestationStatementVerifier<TContext>
     }
 
     /// <summary>
-    ///     Extracts the required claims from the validated JWT (JWS) token of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
+    ///     Extracts the required claims from the validated JWT (JWS) token of the <a href="https://www.w3.org/TR/webauthn-3/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
     /// </summary>
     /// <param name="validatedJwt">The validated JWS (JWT) token of Android SafetyNet attestation statement.</param>
     /// <param name="nonce">Output parameter that contains a value only if the method returns true. The single-use token that the calling app passes to the API.</param>
