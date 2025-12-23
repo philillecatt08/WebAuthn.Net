@@ -8,13 +8,13 @@ using WebAuthn.Net.Services.Static;
 namespace WebAuthn.Net.Services.Common.AttestationStatementVerifier.Implementation.Apple.Constants;
 
 /// <summary>
-///     Embedded root certificates for the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-apple-anonymous-attestation">Apple Anonymous attestation statement</a>.
+///     Embedded root certificates for the <a href="https://www.w3.org/TR/webauthn-3/#sctn-apple-anonymous-attestation">Apple Anonymous attestation statement</a>.
 /// </summary>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public static class AppleRoots
 {
     /// <summary>
-    ///     Root CA certificates for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-apple-anonymous-attestation">Apple Anonymous attestation statement</a>.
+    ///     Root CA certificates for <a href="https://www.w3.org/TR/webauthn-3/#sctn-apple-anonymous-attestation">Apple Anonymous attestation statement</a>.
     /// </summary>
     public static readonly byte[][] Certificates = GetRootCertificates();
 
