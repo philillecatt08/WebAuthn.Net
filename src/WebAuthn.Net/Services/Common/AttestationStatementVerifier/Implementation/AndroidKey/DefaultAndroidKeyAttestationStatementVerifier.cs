@@ -203,7 +203,7 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
     /// </summary>
     /// <param name="context">The context in which the WebAuthn operation is performed.</param>
     /// <param name="credCert">X509v3 certificate containing extension data of the Android Key attestation statement</param>
-    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
+    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/webauthn-3/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/webauthn-3/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
     /// <param name="cancellationToken">Cancellation token for an asynchronous operation.</param>
     /// <returns>If the collection of root certificates was successfully formed, the result contains <see cref="UniqueByteArraysCollection" />, otherwise the result indicates that there was an error during the collection formation process.</returns>
     protected virtual async Task<Result<UniqueByteArraysCollection>> GetAcceptableTrustAnchorsAsync(
@@ -593,8 +593,8 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
     protected virtual bool TryGetKeyDescriptionAttestationExtension(X509Certificate2 credCert, [NotNullWhen(true)] out Asn1Sequence? keyDescription)
     {
         ArgumentNullException.ThrowIfNull(credCert);
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-key-attstn-cert-requirements
-        // §8.4.1. Android Key Attestation Statement Certificate Requirements
+        // https://www.w3.org/TR/webauthn-3/#sctn-key-attstn-cert-requirements
+        // "Android Key Attestation Statement Certificate Requirements"
         // Android Key Attestation attestation certificate's android key attestation certificate extension data
         // is identified by the OID 1.3.6.1.4.1.11129.2.1.17, and its schema is defined in the Android developer documentation.
         foreach (var extension in credCert.Extensions)
