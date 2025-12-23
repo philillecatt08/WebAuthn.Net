@@ -3,7 +3,7 @@ using System;
 namespace WebAuthn.Net.Services.Common.AttestationStatementDecoder.Models.AttestationStatements;
 
 /// <summary>
-///     Decoded <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
+///     Decoded <a href="https://www.w3.org/TR/webauthn-3/#sctn-android-safetynet-attestation">Android SafetyNet attestation statement</a>.
 /// </summary>
 public class AndroidSafetyNetAttestationStatement : AbstractAttestationStatement
 {
