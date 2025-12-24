@@ -121,8 +121,8 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
         byte[] clientDataHash,
         CancellationToken cancellationToken)
     {
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-attestation
-        // §8.3. TPM Attestation Statement Format
+        // https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation
+        // "TPM Attestation Statement Format"
 
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(attStmt);
@@ -152,7 +152,7 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
     ///     Verifies that the public key specified by the 'parameters' and 'unique' fields of 'pubArea' is identical to the 'credentialPublicKey' in the 'attestedCredentialData' in 'authenticatorData'.
     /// </summary>
     /// <param name="pubArea">Decoded 'pubArea' (structure used by the TPM to represent the credential public key).</param>
-    /// <param name="authDataKey"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-public-key">Credential public key</a> from <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">authenticator data</a> in COSE format.</param>
+    /// <param name="authDataKey"><a href="https://www.w3.org/TR/webauthn-3/#credential-public-key">Credential public key</a> from <a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">authenticator data</a> in COSE format.</param>
     /// <returns><see langword="true" /> if the keys are identical, otherwise - <see langword="false" />.</returns>
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract")]
     protected virtual bool PubAreaKeySameAsAttestedCredentialData(PubArea pubArea, AbstractCoseKey authDataKey)
@@ -180,8 +180,8 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
     ///     Validates that the certInfo is valid.
     /// </summary>
     /// <param name="context">The context in which the WebAuthn operation is performed.</param>
-    /// <param name="attStmt">Decoded <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-attestation">TPM attestation statement</a>.</param>
-    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
+    /// <param name="attStmt">Decoded <a href="https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation">TPM attestation statement</a>.</param>
+    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/webauthn-3/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/webauthn-3/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
     /// <param name="attToBeSigned">The result of concatenating 'authenticatorData' and 'clientDataHash' to form 'attToBeSigned'.</param>
     /// <param name="cancellationToken">Cancellation token for an asynchronous operation.</param>
     /// <returns>If the verification is successful - the result containing <see cref="VerifiedAttestationStatement" />, otherwise - the result indicating that the validation has failed.</returns>
@@ -199,7 +199,7 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
             return Result<VerifiedAttestationStatement>.Fail();
         }
 
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-attestation
+        // https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation
         // §8.3. TPM Attestation Statement Format
         // Validate that certInfo is valid:
         // 1) Verify that 'magic' is set to TPM_GENERATED_VALUE.
@@ -338,7 +338,7 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
     /// <param name="context">The context in which the WebAuthn operation is performed.</param>
     /// <param name="aikCert">The AIK certificate used for the attestation, in X.509 encoding.</param>
     /// <param name="manufacturerRootCertificates">Root CA x509v3 certificates of the specific TPM module manufacturer. May be null.</param>
-    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
+    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/webauthn-3/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/webauthn-3/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
     /// <param name="cancellationToken">Cancellation token for an asynchronous operation.</param>
     /// <returns>If the collection of root certificates was successfully formed, the result contains <see cref="UniqueByteArraysCollection" />, otherwise the result indicates that there was an error during the collection formation process.</returns>
     protected virtual async Task<Result<UniqueByteArraysCollection>> GetAcceptableTrustAnchorsAsync(
@@ -405,7 +405,7 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
     }
 
     /// <summary>
-    ///     Verifies that the AIK certificate used for the attestation satisfies the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-cert-requirements">TPM attestation statement certificate requirements (section 8.3.1 of the WebAuthn specification)</a>, and also in
+    ///     Verifies that the AIK certificate used for the attestation satisfies the <a href="https://www.w3.org/TR/webauthn-3/#sctn-tpm-cert-requirements">TPM attestation statement certificate requirements (section 8.3.1 of the WebAuthn specification)</a>, and also in
     ///     case of success may return a collection of Root CA X509v3 certificates of the TPM module manufacturer in the out parameter.
     /// </summary>
     /// <param name="aikCert">The AIK certificate used for the attestation, in X.509 encoding.</param>
@@ -422,7 +422,7 @@ public class DefaultTpmAttestationStatementVerifier<TContext> : ITpmAttestationS
             return false;
         }
 
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-cert-requirements
+        // https://www.w3.org/TR/webauthn-3/#sctn-tpm-cert-requirements
         // §8.3.1. TPM Attestation Statement Certificate Requirements
         // TPM attestation certificate MUST have the following fields/extensions:
         // 1) Version MUST be set to 3.

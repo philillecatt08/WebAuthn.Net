@@ -45,8 +45,8 @@ public class DefaultTpmCertInfoDecoder : ITpmCertInfoDecoder
         }
 
         var magic = BinaryPrimitives.ReadUInt32BigEndian(rawMagic);
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-attestation
-        // §8.3. TPM Attestation Statement Format
+        // https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation
+        // "TPM Attestation Statement Format"
         // Validate that certInfo is valid:
         // 1) Verify that magic is set to TPM_GENERATED_VALUE.
         if (magic != 0xff544347)
@@ -77,7 +77,7 @@ public class DefaultTpmCertInfoDecoder : ITpmCertInfoDecoder
         }
 
         var type = BinaryPrimitives.ReadUInt16BigEndian(rawType);
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-tpm-attestation
+        // https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation
         // §8.3. TPM Attestation Statement Format
         // Validate that certInfo is valid:
         // 2) Verify that type is set to TPM_ST_ATTEST_CERTIFY.
