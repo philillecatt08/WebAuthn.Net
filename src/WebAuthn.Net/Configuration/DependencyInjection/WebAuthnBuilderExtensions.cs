@@ -41,7 +41,6 @@ using WebAuthn.Net.Services.Common.ChallengeGenerator;
 using WebAuthn.Net.Services.Common.ChallengeGenerator.Implementation;
 using WebAuthn.Net.Services.Common.ClientDataDecoder;
 using WebAuthn.Net.Services.Common.ClientDataDecoder.Implementation;
-using WebAuthn.Net.Services.Common.ClientDataDecoder.Models.Enums;
 using WebAuthn.Net.Services.Context;
 using WebAuthn.Net.Services.Cryptography.Sign;
 using WebAuthn.Net.Services.Cryptography.Sign.Implementation;
@@ -338,7 +337,6 @@ public static class WebAuthnBuilderExtensions
         builder.Services.TryAddSingleton<ICborDeserializer, DefaultCborDeserializer>();
         builder.Services.TryAddSingleton<ISafeJsonSerializer, DefaultSafeJsonSerializer>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<AttestationStatementFormat>, DefaultEnumMemberAttributeSerializer<AttestationStatementFormat>>();
-        builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<TokenBindingStatus>, DefaultEnumMemberAttributeSerializer<TokenBindingStatus>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<UserVerificationMethod>, DefaultEnumMemberAttributeSerializer<UserVerificationMethod>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<ProtocolFamily>, DefaultEnumMemberAttributeSerializer<ProtocolFamily>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<AuthenticationAlgorithm>, DefaultEnumMemberAttributeSerializer<AuthenticationAlgorithm>>();
