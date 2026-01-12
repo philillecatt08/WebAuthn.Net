@@ -302,16 +302,19 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-registering-a-new-credential
-            // 1. Let 'options' be a new 'PublicKeyCredentialCreationOptions' structure configured to the Relying Party's needs for the ceremony.
-            var options = registrationCeremonyParameters.Options;
+            // https://www.w3.org/TR/webauthn-3/#sctn-registering-a-new-credential
+            // 1. Let 'options' be a new 'CredentialCreationOptions' structure configured to the Relying Party’s needs for the ceremony.
+            // Let 'pkOptions' be 'options.publicKey'.
+            var pkOptions = registrationCeremonyParameters.Options;
 
-            // 2. Call navigator.credentials.create() and pass 'options' as the 'publicKey' option.
+            // 2. Call navigator.credentials.create() and pass 'options' as the argument.
             // Let 'credential' be the result of the successfully resolved promise.
-            // If the promise is rejected, abort the ceremony with a user-visible error, or otherwise guide the user experience as might be determinable
-            // from the context available in the rejected promise. For example if the promise is rejected with an error code equivalent to "InvalidStateError",
+            // If the promise is rejected, abort the ceremony with a user-visible error,
+            // or otherwise guide the user experience as might be determinable from the context available in the rejected promise.
+            // For example if the promise is rejected with an error code equivalent to "InvalidStateError",
             // the user might be instructed to use a different authenticator.
-            // For information on different error contexts and the circumstances leading to them, see §6.3.2 The authenticatorMakeCredential Operation.
+            // For information on different error contexts and the circumstances leading to them,
+            // see "The authenticatorMakeCredential Operation".
             var credentialResult = RegistrationResponseDecoder.Decode(request.Response);
             if (credentialResult.HasError)
             {
@@ -326,18 +329,18 @@ public class DefaultRegistrationCeremonyService<TContext>
             var response = credential.Response;
 
             // 4. Let 'clientExtensionResults' be the result of calling 'credential.getClientExtensionResults()'.
-            //var clientExtensionResults = credential.ClientExtensionResults;
+            // var clientExtensionResults = credential.ClientExtensionResults;
 
             // 5. Let 'JSONtext' be the result of running UTF-8 decode on the value of 'response.clientDataJSON'.
             // Note: Using any implementation of UTF-8 decode is acceptable as long as it yields the same result as that yielded by the UTF-8 decode algorithm.
-            // In particular, any leading byte order mark (BOM) MUST be stripped.
+            // In particular, any leading byte order mark (BOM) must be stripped.
             // ReSharper disable once InconsistentNaming
             var JSONtext = Encoding.UTF8.GetString(response.ClientDataJson);
 
             // 6. Let 'C', the client data claimed as collected during the credential creation,
             // be the result of running an implementation-specific JSON parser on 'JSONtext'.
-            // Note: 'C' may be any implementation-specific data structure representation, as long as C's components are referenceable,
-            // as required by this algorithm.
+            // Note: 'C' may be any implementation-specific data structure representation,
+            // as long as C’s components are referenceable, as required by this algorithm.
             var clientDataResult = ClientDataDecoder.Decode(JSONtext);
             if (clientDataResult.HasError)
             {
@@ -357,15 +360,16 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 8. Verify that the value of 'C.challenge' equals the base64url encoding of 'options.challenge'.
-            if (!string.Equals(C.Challenge, Base64Url.Encode(options.Challenge), StringComparison.Ordinal))
+            // 8. Verify that the value of 'C.challenge' equals the base64url encoding of 'pkOptions.challenge'.
+            if (!string.Equals(C.Challenge, Base64Url.Encode(pkOptions.Challenge), StringComparison.Ordinal))
             {
                 Logger.ChallengeMismatch();
                 Counters.IncrementCompleteCeremonyEnd(false);
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 9. Verify that the value of 'C.origin' is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
+            // 9. Verify that the value of 'C.origin' is an origin expected by the Relying Party.
+            // See "Validating the origin of a credential" for guidance.
             var allowedOrigin = registrationCeremonyParameters.ExpectedRp.Origins.FirstOrDefault(x => string.Equals(x, C.Origin, StringComparison.Ordinal));
             if (allowedOrigin is null)
             {
@@ -374,21 +378,19 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 10. If 'C.topOrigin' is present:
-            if (C.TopOrigin is not null)
+            // 10. If C.crossOrigin is present and set to true,
+            // verify that the Relying Party expects that this credential would have been created
+            // within an iframe that is not same-origin with its ancestors.
+            // 11. If C.topOrigin is present:
+            if (C.CrossOrigin is true or null && C.TopOrigin is not null)
             {
-                //   1. Verify that the Relying Party expects that this credential would have been created within an iframe that is not same-origin with its ancestors.
-                //   2. Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within. See §13.4.9 Validating the origin of a credential for guidance.
-                if (!registrationCeremonyParameters.ExpectedRp.AllowIframe)
-                {
-                    if (!string.Equals(allowedOrigin, C.TopOrigin, StringComparison.Ordinal))
-                    {
-                        Logger.InvalidTopOrigin(C.TopOrigin);
-                        Counters.IncrementCompleteCeremonyEnd(false);
-                        return Result<CompleteRegistrationCeremonyResult>.Fail();
-                    }
-                }
-                else
+                // 11.1 Verify that the Relying Party expects
+                // that this credential would have been created within an iframe
+                // that is not same-origin with its ancestors.
+                // 11.2 Verify that the value of C.topOrigin matches the origin of a page
+                // that the Relying Party expects to be sub-framed within.
+                // See "Validating the origin of a credential" for guidance.
+                if (registrationCeremonyParameters.ExpectedRp.AllowIframe)
                 {
                     if (!registrationCeremonyParameters.ExpectedRp.TopOrigins.Any(x => string.Equals(x, C.TopOrigin, StringComparison.Ordinal)))
                     {
@@ -397,14 +399,24 @@ public class DefaultRegistrationCeremonyService<TContext>
                         return Result<CompleteRegistrationCeremonyResult>.Fail();
                     }
                 }
+                else
+                {
+                    if (!string.Equals(allowedOrigin, C.TopOrigin, StringComparison.Ordinal))
+                    {
+                        Logger.InvalidTopOrigin(C.TopOrigin);
+                        Counters.IncrementCompleteCeremonyEnd(false);
+                        return Result<CompleteRegistrationCeremonyResult>.Fail();
+                    }
+                }
             }
 
-            // 11. Let 'hash' be the result of computing a hash over 'response.clientDataJSON' using SHA-256.
+            // 12. Let 'hash' be the result of computing a hash over 'response.clientDataJSON' using SHA-256.
             var hash = SHA256.HashData(response.ClientDataJson);
 
-            // 12. Perform CBOR decoding on the 'attestationObject' field of the 'AuthenticatorAttestationResponse' structure
-            // (see 3. Let 'response' be 'credential.response')
-            // to obtain the attestation statement format 'fmt', the authenticator data 'authData', and the attestation statement 'attStmt'.
+            // 13. Perform CBOR decoding on the 'attestationObject' field of the 'AuthenticatorAttestationResponse' structure
+            // to obtain the attestation statement format 'fmt',
+            // the authenticator data 'authData',
+            // and the attestation statement 'attStmt'.
             var attestationObjectResult = AttestationObjectDecoder.Decode(response.AttestationObject);
             if (attestationObjectResult.HasError)
             {
@@ -414,8 +426,6 @@ public class DefaultRegistrationCeremonyService<TContext>
             }
 
             var fmt = attestationObjectResult.Ok.Fmt;
-            // Attestation objects provided in an AuthenticatorAttestationResponse structure (i.e. as the result of a create() operation)
-            // contain at least the three keys shown in the previous figure: fmt, attStmt, and authData.
             if (attestationObjectResult.Ok.AuthData is null)
             {
                 Logger.NullAuthDataForRegistration();
@@ -431,7 +441,12 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // §6.5.2. Attested Credential Data
+            // "Attested Credential Data"
+            // https://www.w3.org/TR/webauthn-3/#sctn-attested-credential-data
+            // https://www.w3.org/TR/webauthn-3/#sctn-attestation
+            // All this information is returned by authenticators any time a new public key credential is generated, in the overall form of an attestation object
+
+            // (This is a verbatim quote from an earlier version of the spec that explains MUCH MORE CLEARLY what's going on)
             // Attested credential data is always present in any authenticator data that results from a create() operation.
             if (authDataResult.Ok is not AttestedAuthenticatorData authData)
             {
@@ -450,7 +465,7 @@ public class DefaultRegistrationCeremonyService<TContext>
 
             var attStmt = attStmtResult.Ok;
 
-            // 13. Verify that the 'rpIdHash' in 'authData' is the SHA-256 hash of the 'RP ID' expected by the Relying Party.
+            // 14. Verify that the 'rpIdHash' in 'authData' is the SHA-256 hash of the 'RP ID' expected by the Relying Party..
             var authDataRpIdHash = authData.RpIdHash;
             var expectedRpIdHash = SHA256.HashData(Encoding.UTF8.GetBytes(registrationCeremonyParameters.ExpectedRp.RpId));
             if (!authDataRpIdHash.AsSpan().SequenceEqual(expectedRpIdHash.AsSpan()))
@@ -460,7 +475,8 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 14. Verify that the UP bit of the 'flags' in 'authData' is set.
+            // 15. If 'options.mediation' is not set to "conditional",
+            // verify that the 'UP' bit of the 'flags' in 'authData' is set.
             if ((authData.Flags & AuthenticatorDataFlags.UserPresent) is not AuthenticatorDataFlags.UserPresent)
             {
                 Logger.UserPresentBitNotSet();
@@ -468,8 +484,9 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 15. If the Relying Party requires user verification for this registration, verify that the UV bit of the 'flags' in 'authData' is set.
-            var userVerificationRequired = options.AuthenticatorSelection?.UserVerification is UserVerificationRequirement.Required;
+            // 16. If the Relying Party requires user verification for this registration,
+            // verify that the 'UV' bit of the 'flags' in 'authData' is set.
+            var userVerificationRequired = pkOptions.AuthenticatorSelection?.UserVerification is UserVerificationRequirement.Required;
             var uvInitialized = (authData.Flags & AuthenticatorDataFlags.UserVerified) is AuthenticatorDataFlags.UserVerified;
             if (userVerificationRequired && !uvInitialized)
             {
@@ -478,13 +495,13 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 16. If the BE bit of the 'flags' in 'authData' is not set, verify that the BS bit is not set.
+            // 17. If the 'BE' bit of the 'flags' in 'authData' is not set, verify that the 'BS' bit is not set.
             var currentBe = (authData.Flags & AuthenticatorDataFlags.BackupEligibility) is AuthenticatorDataFlags.BackupEligibility;
             var currentBs = (authData.Flags & AuthenticatorDataFlags.BackupState) is AuthenticatorDataFlags.BackupState;
             if (!currentBe && currentBs)
             {
-                // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-credential-backup
-                // §6.1.3. Credential Backup State
+                // https://www.w3.org/TR/webauthn-3/#sctn-credential-backup
+                // "Credential Backup State"
                 // | BE | BS | Description
                 // |  0 |  0 | The credential is a single-device credential.
                 // |  0 |  1 | This combination is not allowed.
@@ -495,37 +512,33 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 17. If the Relying Party uses the credential's backup eligibility to inform its user experience flows and/or policies,
-            // evaluate the BE bit of the flags in authData.
-            // 18. If the Relying Party uses the credential's backup state to inform its user experience flows and/or policies,
-            // evaluate the BS bit of the flags in authData.
+            // 18. If the Relying Party uses the credential’s backup eligibility
+            // to inform its user experience flows and/or policies,
+            // evaluate the 'BE' bit of the 'flags' in 'authData'.
+            // 19. If the Relying Party uses the credential’s backup state
+            // to inform its user experience flows and/or policies,
+            // evaluate the 'BS' bit of the 'flags' in authData.
 
-            // 19. Verify that the 'alg' parameter in the credential public key in 'authData' matches the 'alg' attribute of one of the items in 'options.pubKeyCredParams'.
-            // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-attested-credential-data
-
-            var expectedAlgorithms = options.PubKeyCredParams.Select(x => x.Alg).ToHashSet();
+            // 20. Verify that the "alg" parameter in the credential public key in 'authData'
+            // matches the 'alg' attribute of one of the items in 'pkOptions.pubKeyCredParams'.
+            // https://www.w3.org/TR/webauthn-3/#sctn-attested-credential-data
+            var expectedAlgorithms = pkOptions.PubKeyCredParams.Select(x => x.Alg).ToHashSet();
             if (!expectedAlgorithms.Contains(authData.AttestedCredentialData.CredentialPublicKey.Alg))
             {
                 Logger.AuthDataAlgDoesntMatchPubKeyCredParams();
                 Counters.IncrementCompleteCeremonyEnd(false);
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
-            // 20. Verify that the values of the client extension outputs in 'clientExtensionResults' and the authenticator extension outputs in the extensions
-            // in 'authData' are as expected, considering the client extension input values that were given in 'options.extensions'
-            // and any specific policy of the Relying Party regarding unsolicited extensions, i.e., those that were not specified as part of 'options.extensions'.
-            // In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-
-            // extensions not implemented
-
-
             // 21. Determine the attestation statement format by performing a USASCII case-sensitive match on 'fmt'
             // against the set of supported WebAuthn Attestation Statement Format Identifier values.
-            // An up-to-date list of registered WebAuthn Attestation Statement Format Identifier values is maintained in the
-            // IANA "WebAuthn Attestation Statement Format Identifiers" registry [IANA-WebAuthn-Registries] established by [RFC8809].
+            // An up-to-date list of registered WebAuthn Attestation Statement Format Identifier values
+            // is maintained in the IANA "WebAuthn Attestation Statement Format Identifiers" registry
+            // established by RFC8809.
             // 22. Verify that 'attStmt' is a correct attestation statement, conveying a valid attestation signature,
             // by using the attestation statement format 'fmt' verification procedure given 'attStmt', 'authData' and 'hash'.
-            // Each attestation statement format specifies its own verification procedure.
-            // See §8 Defined Attestation Statement Formats for the initially-defined formats, and [IANA-WebAuthn-Registries] for the up-to-date list.
+            // Note: Each attestation statement format specifies its own verification procedure.
+            // See "Defined Attestation Statement Formats" for the initially-defined formats,
+            // and [IANA-WebAuthn-Registries] for the up-to-date list..
 
             var attStmtVerificationResult = await AttestationStatementVerifier.VerifyAttestationStatementAsync(
                 context,
@@ -545,7 +558,7 @@ public class DefaultRegistrationCeremonyService<TContext>
 
             // 23. If validation is successful, obtain a list of acceptable trust anchors (i.e. attestation root certificates)
             // for that attestation type and attestation statement format 'fmt', from a trusted source or from policy.
-            // For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
+            // For example, the FIDO Metadata Service provides one way to obtain such information,
             // using the 'aaguid' in the 'attestedCredentialData' in 'authData'.
 
             // 24. Assess the attestation trustworthiness using the outputs of the verification procedure in step 21, as follows:
@@ -567,7 +580,7 @@ public class DefaultRegistrationCeremonyService<TContext>
 
             // 24.3 Otherwise, use the X.509 certificates returned as the attestation trust path from the verification procedure
             // to verify that the attestation public key either correctly chains up to an acceptable root certificate,
-            // or is itself an acceptable certificate (i.e., it and the root certificate obtained in Step 22 may be the same).
+            // or is itself an acceptable certificate (i.e., it and the root certificate obtained in step 22 may be the same).
             if (!AttestationTrustPathValidator.IsValid(attStmtVerification))
             {
                 Logger.AttestationTrustPathIsInvalid();
@@ -575,7 +588,12 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 25. Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
+            // If the attestation statement is not deemed trustworthy,
+            // the Relying Party SHOULD fail the registration ceremony.
+
+
+            // 25. Verify that the 'credentialId' is ≤ 1023 bytes.
+            // Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
             if (authData.AttestedCredentialData.CredentialId.Length > 1023)
             {
                 Logger.CredentialIdIsTooBig();
@@ -583,12 +601,24 @@ public class DefaultRegistrationCeremonyService<TContext>
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
 
-            // 26. Verify that the credentialId is not yet registered for any user.
-            // If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
-            // 27. If the attestation statement 'attStmt' verified successfully and is found to be trustworthy,
-            // then create and store a new credential record in the user account that was denoted in options.user
-            // 28. If the attestation statement attStmt successfully verified but is not trustworthy per step 23 above,
-            // the Relying Party SHOULD fail the registration ceremony.
+            // 26. Verify that the 'credentialId' is not yet registered for any user.
+            // If the 'credentialId' is already known then the Relying Party SHOULD fail this registration ceremony.
+            // 27. Let 'credentialRecord' be a new credential record with the following contents:
+            // - type: credential.type.
+            // - id: credential.id or credential.rawId, whichever format is preferred by the Relying Party.
+            // - publicKey: The credential public key in authData.
+            // - signCount: authData.signCount.
+            // - uvInitialized: The value of the UV flag in authData.
+            // - transports: The value returned from response.getTransports().
+            // - backupEligible: The value of the BE flag in authData.
+            // - backupState: The value of the BS flag in authData.
+            // The new credential record MAY also include the following OPTIONAL contents:
+            // - attestationObject: response.attestationObject.
+            // - attestationClientDataJSON: response.clientDataJSON.
+            // The Relying Party MAY also include any additional items as necessary.
+            // As a non-normative example, the Relying Party might allow the user to set a "nickname"
+            // for the credential to help the user remember which credential is bound to which authenticator
+            // when interacting with account settings.
             var credentialRecord = CreateCredentialRecord(
                 credential,
                 authData,
@@ -616,9 +646,20 @@ public class DefaultRegistrationCeremonyService<TContext>
                 Counters.IncrementCompleteCeremonyEnd(false);
                 return Result<CompleteRegistrationCeremonyResult>.Fail();
             }
+            // 28. Process the client extension outputs in 'clientExtensionResults'
+            // and the authenticator extension outputs in the extensions in 'authData' as required by the Relying Party.
+            // Depending on each extension, processing steps may be concretely specified
+            // or it may be up to the Relying Party what to do with extension outputs.
+            // The Relying Party MAY ignore any or all extension outputs.
 
+            // We ignore extensions
+
+            // 29. If all the above steps are successful,
+            // store 'credentialRecord' in the user account that was denoted in 'pkOptions.user'
+            // and continue the registration ceremony as appropriate.
+            // Otherwise, fail the registration ceremony.
             await CeremonyStorage.RemoveAsync(context, request.RegistrationCeremonyId, cancellationToken);
-            // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-credential-backup
+            // https://www.w3.org/TR/webauthn-3/#sctn-credential-backup
             // When the BE flag is set to 0
             var requiringAdditionalAuthenticators = !currentBe;
             var successfulResult = new CompleteRegistrationCeremonyResult(
