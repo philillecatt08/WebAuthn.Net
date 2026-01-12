@@ -69,13 +69,13 @@ public class DefaultRegistrationCeremonyService<TContext>
     /// <param name="publicKeyCredentialCreationOptionsEncoder">Encoder for transforming <see cref="PublicKeyCredentialCreationOptions" /> into a model suitable for JSON serialization.</param>
     /// <param name="credentialStorage">Credential storage. This is where the credentials are located, providing methods for storing credentials that are created during the registration ceremony, as well as methods for accessing them during the authentication ceremony.</param>
     /// <param name="ceremonyStorage">Storage for registration ceremony data.</param>
-    /// <param name="registrationResponseDecoder">Decoder for <see cref="RegistrationResponseJSON" /> (<a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#iface-pkcredential">PublicKeyCredential</a>) from a model suitable for JSON serialization to a typed representation.</param>
-    /// <param name="clientDataDecoder">Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-client-data">clientData</a> from JSON into a typed representation.</param>
-    /// <param name="attestationObjectDecoder">Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#fig-attStructs">attestationObject</a> from binary into a typed representation.</param>
-    /// <param name="authenticatorDataDecoder">Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">authenticator data</a> from binary into a typed representation.</param>
-    /// <param name="attestationStatementDecoder">Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">attestation statement</a> from CBOR into a typed representation.</param>
-    /// <param name="attestationStatementVerifier">Verifier of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">attestation statement</a>.</param>
-    /// <param name="attestationTrustPathValidator"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-trust-path">Attestation trust path</a> validator. It validates that the attestation statement is trustworthy.</param>
+    /// <param name="registrationResponseDecoder">Decoder for <see cref="RegistrationResponseJSON" /> (<a href="https://www.w3.org/TR/webauthn-3/#iface-pkcredential">PublicKeyCredential</a>) from a model suitable for JSON serialization to a typed representation.</param>
+    /// <param name="clientDataDecoder">Decoder for <a href="https://www.w3.org/TR/webauthn-3/#dictionary-client-data">clientData</a> from JSON into a typed representation.</param>
+    /// <param name="attestationObjectDecoder">Decoder for <a href="https://www.w3.org/TR/webauthn-3/#attestation-object">attestationObject</a> from binary into a typed representation.</param>
+    /// <param name="authenticatorDataDecoder">Decoder for <a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">authenticator data</a> from binary into a typed representation.</param>
+    /// <param name="attestationStatementDecoder">Decoder for <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">attestation statement</a> from CBOR into a typed representation.</param>
+    /// <param name="attestationStatementVerifier">Verifier of the <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">attestation statement</a>.</param>
+    /// <param name="attestationTrustPathValidator"><a href="https://www.w3.org/TR/webauthn-3/#attestation-trust-path">Attestation trust path</a> validator. It validates that the attestation statement is trustworthy.</param>
     /// <param name="counters">Counters for registration ceremony metrics.</param>
     /// <param name="logger">Logger.</param>
     /// <exception cref="ArgumentNullException">Any of the parameters is <see langword="null" /></exception>
@@ -183,37 +183,37 @@ public class DefaultRegistrationCeremonyService<TContext>
     protected IRegistrationCeremonyStorage<TContext> CeremonyStorage { get; }
 
     /// <summary>
-    ///     Decoder for <see cref="RegistrationResponseJSON" /> (<a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#iface-pkcredential">PublicKeyCredential</a>) from a model suitable for JSON serialization to a typed representation.
+    ///     Decoder for <see cref="RegistrationResponseJSON" /> (<a href="https://www.w3.org/TR/webauthn-3/#iface-pkcredential">PublicKeyCredential</a>) from a model suitable for JSON serialization to a typed representation.
     /// </summary>
     protected IRegistrationResponseDecoder RegistrationResponseDecoder { get; }
 
     /// <summary>
-    ///     Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-client-data">clientData</a> from JSON into a typed representation.
+    ///     Decoder for <a href="https://www.w3.org/TR/webauthn-3/#dictionary-client-data">clientData</a> from JSON into a typed representation.
     /// </summary>
     protected IClientDataDecoder ClientDataDecoder { get; }
 
     /// <summary>
-    ///     Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#fig-attStructs">attestationObject</a> from binary into a typed representation.
+    ///     Decoder for <a href="https://www.w3.org/TR/webauthn-3/#attestation-object">attestationObject</a> from binary into a typed representation.
     /// </summary>
     protected IAttestationObjectDecoder AttestationObjectDecoder { get; }
 
     /// <summary>
-    ///     Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator-data">authenticator data</a> from binary into a typed representation.
+    ///     Decoder for <a href="https://www.w3.org/TR/webauthn-3/#authenticator-data">authenticator data</a> from binary into a typed representation.
     /// </summary>
     protected IAuthenticatorDataDecoder AuthenticatorDataDecoder { get; }
 
     /// <summary>
-    ///     Decoder for <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">attestation statement</a> from CBOR into a typed representation.
+    ///     Decoder for <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">attestation statement</a> from CBOR into a typed representation.
     /// </summary>
     protected IAttestationStatementDecoder AttestationStatementDecoder { get; }
 
     /// <summary>
-    ///     Verifier of the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-statement">attestation statement</a>.
+    ///     Verifier of the <a href="https://www.w3.org/TR/webauthn-3/#attestation-statement">attestation statement</a>.
     /// </summary>
     protected IAttestationStatementVerifier<TContext> AttestationStatementVerifier { get; }
 
     /// <summary>
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-trust-path">Attestation trust path</a> validator. It validates that the attestation statement is trustworthy.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#attestation-trust-path">Attestation trust path</a> validator. It validates that the attestation statement is trustworthy.
     /// </summary>
     protected IAttestationTrustPathValidator AttestationTrustPathValidator { get; }
 
@@ -250,7 +250,7 @@ public class DefaultRegistrationCeremonyService<TContext>
         var origins = request.Origins is not null
             ? request.Origins.AllowedOrigins
             : new[] { defaultOrigin };
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-validating-origin
+        // https://www.w3.org/TR/webauthn-3/#sctn-validating-origin
         // A web application that does not wish to be embedded in a cross-origin iframe might require topOrigin to exactly equal origin.
         string[]? topOrigins = null;
         var allowIframe = false;
