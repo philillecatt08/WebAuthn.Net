@@ -9,10 +9,10 @@ using WebAuthn.Net.Services.Serialization.Cose.Models.Enums;
 namespace WebAuthn.Net.Services.RegistrationCeremony.Models.CreateOptions;
 
 /// <summary>
-///     Options for credential creation
+///     Options for Credential Creation (dictionary PublicKeyCredentialCreationOptions)
 /// </summary>
 /// <remarks>
-///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-makecredentialoptions">Web Authentication: An API for accessing Public Key Credentials Level 3 - §5.4. Options for Credential Creation</a>
+///     <a href="https://www.w3.org/TR/webauthn-3/#dictionary-makecredentialoptions">Web Authentication: An API for accessing Public Key Credentials Level 3 - Options for Credential Creation (dictionary PublicKeyCredentialCreationOptions)</a>
 /// </remarks>
 public class BeginRegistrationCeremonyRequest
 {
@@ -21,39 +21,37 @@ public class BeginRegistrationCeremonyRequest
     /// </summary>
     /// <param name="origins">Parameters defining acceptable origins for the registration ceremony.</param>
     /// <param name="topOrigins">Parameters defining acceptable topOrigins (iframe that is not same-origin with its ancestors) for the registration ceremony.</param>
-    /// <param name="rpDisplayName">A <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#human-palatability">human-palatable</a> identifier for the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>, intended only for display.</param>
-    /// <param name="user">This member contains names and an identifier for the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#user-account">user account</a> performing the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#registration">registration</a>.</param>
+    /// <param name="rpDisplayName">A <a href="https://www.w3.org/TR/webauthn-3/#human-palatability">human-palatable</a> identifier for the <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a>, intended only for display.</param>
+    /// <param name="user">This member contains names and an identifier for the <a href="https://www.w3.org/TR/webauthn-3/#user-account">user account</a> performing the <a href="https://www.w3.org/TR/webauthn-3/#registration">registration</a>.</param>
     /// <param name="challengeSize">
-    ///     The size of the randomly generated <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialcreationoptions-challenge">challenge</a> value.
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-cryptographic-challenges">The minimum allowed size is 16.</a>
+    ///     The size of the randomly generated <a href="https://www.w3.org/TR/webauthn-3/#dom-publickeycredentialcreationoptions-challenge">challenge</a> value.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#sctn-cryptographic-challenges">Challenges SHOULD therefore be at least 16 bytes long.</a>
     /// </param>
     /// <param name="pubKeyCredParams">This member specifies the cryptographic signature algorithm with which the newly generated credential will be used, and thus also the type of asymmetric key pair to be generated, e.g., RSA or Elliptic Curve.</param>
     /// <param name="timeout">
-    ///     This OPTIONAL member specifies a time, in milliseconds, that the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> is willing to wait for the call to complete. This is treated as a hint, and MAY be overridden by
-    ///     the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client">client</a>.
+    ///     This OPTIONAL member specifies a time, in milliseconds, that the <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> is willing to wait for the call to complete. This is treated as a hint, and MAY be overridden by the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#client">client</a>.
     /// </param>
     /// <param name="excludeCredentials">Contains the exclusion credentials parameters for the registration ceremony.</param>
     /// <param name="authenticatorSelection">
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify capabilities and settings that the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a> MUST or
-    ///     SHOULD satisfy to participate in the <a href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-create">create()</a> operation. See
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-authenticatorSelection">§5.4.4 Authenticator Selection Criteria (dictionary AuthenticatorSelectionCriteria)</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify capabilities and settings that the <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a> MUST or
+    ///     SHOULD satisfy to participate in the <a href="https://www.w3.org/TR/credential-management-1/#dom-credentialscontainer-create">create()</a> operation.
     /// </param>
-    /// <param name="hints">This OPTIONAL member contains zero or more elements from <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#enumdef-publickeycredentialhints">PublicKeyCredentialHints</a> to guide the user agent in interacting with the user.</param>
+    /// <param name="hints">This OPTIONAL member contains zero or more elements from <a href="https://www.w3.org/TR/webauthn-3/#enumdef-publickeycredentialhint">PublicKeyCredentialHint</a> to guide the user agent in interacting with the user.</param>
     /// <param name="attestation">
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-conveyance">attestation conveyance</a>. Its value SHOULD be a member of
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#enumdef-attestationconveyancepreference">AttestationConveyancePreference</a>. <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-platform">Client platforms</a> MUST ignore unknown values, treating an
-    ///     unknown value as if the <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding <a href="https://www.w3.org/TR/webauthn-3/#attestation-conveyance">attestation conveyance</a>. Its value
+    ///     SHOULD be a member of <a href="https://www.w3.org/TR/webauthn-3/#enumdef-attestationconveyancepreference">AttestationConveyancePreference</a>. <a href="https://www.w3.org/TR/webauthn-3/#client-platform">Client platforms</a> MUST ignore unknown values, treating an unknown
+    ///     value as if the <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>.
     /// </param>
     /// <param name="attestationFormats">
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation">attestation</a> statement format used
-    ///     by the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a>. Values SHOULD be taken from the <a href="https://www.iana.org/assignments/webauthn/webauthn.xhtml">IANA "WebAuthn Attestation Statement Format Identifiers" registry</a>
-    ///     established by <a href="https://www.rfc-editor.org/rfc/rfc8809.html">RFC 8809</a>. Values are ordered from most preferable to least preferable. This parameter is advisory and the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a> MAY
-    ///     use an attestation statement not enumerated in this parameter.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding the <a href="https://www.w3.org/TR/webauthn-3/#attestation">attestation</a> statement format used by the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a>. Values SHOULD be taken from the
+    ///     <a href="https://www.iana.org/assignments/webauthn/webauthn.xhtml#webauthn-attestation-statement-format-ids">IANA "WebAuthn Attestation Statement Format Identifiers"</a> registry established by <a href="https://www.rfc-editor.org/rfc/rfc8809">RFC8809</a>. Values are ordered
+    ///     from most preferred to least preferred. Duplicates are allowed but effectively ignored. This parameter is advisory and the <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a> MAY use an attestation statement not enumerated in this parameter.
     /// </param>
     /// <param name="extensions">
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to provide <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-extension-input">client extension inputs</a>
-    ///     requesting additional processing by the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client">client</a> and <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to provide <a href="https://www.w3.org/TR/webauthn-3/#client-extension-input">client extension inputs</a> requesting additional processing by the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#client">client</a> and <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a>.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="rpDisplayName" /> is <see langword="null" /> or whitespace string</exception>
     /// <exception cref="ArgumentNullException"><paramref name="user" /> is <see langword="null" /></exception>
@@ -187,7 +185,7 @@ public class BeginRegistrationCeremonyRequest
     public RegistrationCeremonyOriginParameters? TopOrigins { get; }
 
     /// <summary>
-    ///     A <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#human-palatability">human-palatable</a> identifier for the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>, intended only for display.
+    ///     A <a href="https://www.w3.org/TR/webauthn-3/#human-palatability">human-palatable</a> identifier for the <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a>, intended only for display.
     /// </summary>
     /// <remarks>
     ///     <para>
@@ -209,29 +207,16 @@ public class BeginRegistrationCeremonyRequest
     public string RpDisplayName { get; }
 
     /// <summary>
-    ///     <para>This member contains names and an identifier for the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#user-account">user account</a> performing the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#registration">registration</a>.</para>
-    ///     <para>
-    ///         Its value's <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialentity-name">name</a>, <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialuserentity-displayname">displayName</a> and
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialuserentity-id">id</a> members are REQUIRED. <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialuserentity-id">id</a> can be returned as the
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-authenticatorassertionresponse-userhandle">userHandle</a> in some future <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authentication-ceremony">authentication ceremonies</a>, and is used to
-    ///         overwrite existing <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#discoverable-credential">discoverable credentials</a> that have the same <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialcreationoptions-rp">rp</a>.
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialrpentity-id">id</a> and <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialcreationoptions-user">user</a>.
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialuserentity-id">id</a> on the same <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a>.
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialentity-name">name</a> and <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialuserentity-displayname">displayName</a> MAY be used by the
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a> and <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client">client</a> in future
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authentication-ceremony">authentication ceremonies</a> to help the user select a <a href="https://w3c.github.io/webappsec-credential-management/#concept-credential">credential</a>, but are not returned to the
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> as a result of future <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authentication-ceremony">authentication ceremonies</a>
-    ///     </para>
+    ///     This member contains names and an identifier for the <a href="https://www.w3.org/TR/webauthn-3/#user-account">user account</a> performing the <a href="https://www.w3.org/TR/webauthn-3/#registration">registration</a>.
     /// </summary>
     /// <remarks>
-    ///     For further details, see <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-pkcredentialentity">§5.4.1 Public Key Entity Description (dictionary PublicKeyCredentialEntity)</a> and
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-user-credential-params">§5.4.3 User Account Parameters for Credential Generation (dictionary PublicKeyCredentialUserEntity)</a>.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#dictionary-user-credential-params">"User Account Parameters for Credential Generation (dictionary PublicKeyCredentialUserEntity)"</a>
     /// </remarks>
     public PublicKeyCredentialUserEntity User { get; }
 
     /// <summary>
-    ///     The size of the randomly generated <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-publickeycredentialcreationoptions-challenge">challenge</a> value.
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-cryptographic-challenges">The minimum allowed size is 16.</a>
+    ///     The size of the randomly generated <a href="https://www.w3.org/TR/webauthn-3/#dom-publickeycredentialcreationoptions-challenge">challenge</a> value.
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#sctn-cryptographic-challenges">Challenges SHOULD therefore be at least 16 bytes long.</a>
     /// </summary>
     public int ChallengeSize { get; }
 
@@ -241,8 +226,8 @@ public class BeginRegistrationCeremonyRequest
     public CoseAlgorithm[] PubKeyCredParams { get; }
 
     /// <summary>
-    ///     This OPTIONAL member specifies a time, in milliseconds, that the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> is willing to wait for the call to complete. This is treated as a hint, and MAY be overridden by the
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client">client</a>.
+    ///     This OPTIONAL member specifies a time, in milliseconds, that the <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> is willing to wait for the call to complete. This is treated as a hint, and MAY be overridden by the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#client">client</a>.
     /// </summary>
     public uint? Timeout { get; }
 
@@ -252,35 +237,31 @@ public class BeginRegistrationCeremonyRequest
     public RegistrationCeremonyExcludeCredentials ExcludeCredentials { get; }
 
     /// <summary>
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify capabilities and settings that the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a> MUST or
-    ///     SHOULD satisfy to participate in the <a href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-create">create()</a> operation. See
-    ///     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictionary-authenticatorSelection">§5.4.4 Authenticator Selection Criteria (dictionary AuthenticatorSelectionCriteria)</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify capabilities and settings that the <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a> MUST or SHOULD satisfy to participate in the
+    ///     <a href="https://www.w3.org/TR/credential-management-1/#dom-credentialscontainer-create">create()</a> operation.
     /// </summary>
     public AuthenticatorSelectionCriteria? AuthenticatorSelection { get; }
 
     /// <summary>
-    ///     This OPTIONAL member contains zero or more elements from <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#enumdef-publickeycredentialhints">PublicKeyCredentialHints</a> to guide the user agent in interacting with the user.
+    ///     This OPTIONAL member contains zero or more elements from <a href="https://www.w3.org/TR/webauthn-3/#enumdef-publickeycredentialhint">PublicKeyCredentialHint</a> to guide the user agent in interacting with the user.
     /// </summary>
-    /// <remarks>
-    ///     defaulting to []
-    /// </remarks>
     public PublicKeyCredentialHints[]? Hints { get; }
 
     /// <summary>
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation-conveyance">attestation conveyance</a>. Its
-    ///     value SHOULD be a member of <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#enumdef-attestationconveyancepreference">AttestationConveyancePreference</a>. <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-platform">Client platforms</a> MUST ignore
-    ///     unknown values, treating an unknown value as if the <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding <a href="https://www.w3.org/TR/webauthn-3/#attestation-conveyance">attestation conveyance</a>. Its value SHOULD be a member of
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#enumdef-attestationconveyancepreference">AttestationConveyancePreference</a>. <a href="https://www.w3.org/TR/webauthn-3/#client-platform">Client platforms</a> MUST ignore unknown values, treating an unknown value as if the
+    ///     <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>.
     /// </summary>
     /// <remarks>
-    ///     defaulting to "none"
+    ///     defaulting to <a href="https://www.w3.org/TR/webauthn-3/#dom-attestationconveyancepreference-none">"none"</a>
     /// </remarks>
     public AttestationConveyancePreference? Attestation { get; }
 
     /// <summary>
-    ///     The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#attestation">attestation</a> statement format used
-    ///     by the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a>. Values SHOULD be taken from the <a href="https://www.iana.org/assignments/webauthn/webauthn.xhtml">IANA "WebAuthn Attestation Statement Format Identifiers" registry</a>
-    ///     established by <a href="https://www.rfc-editor.org/rfc/rfc8809.html">RFC 8809</a>. Values are ordered from most preferable to least preferable. This parameter is advisory and the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a> MAY
-    ///     use an attestation statement not enumerated in this parameter.
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to specify a preference regarding the <a href="https://www.w3.org/TR/webauthn-3/#attestation">attestation</a> statement format used by the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a>. Values SHOULD be taken from the
+    ///     <a href="https://www.iana.org/assignments/webauthn/webauthn.xhtml#webauthn-attestation-statement-format-ids">IANA "WebAuthn Attestation Statement Format Identifiers"</a> registry established by <a href="https://www.rfc-editor.org/rfc/rfc8809">RFC8809</a>. Values are ordered
+    ///     from most preferred to least preferred. Duplicates are allowed but effectively ignored. This parameter is advisory and the <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a> MAY use an attestation statement not enumerated in this parameter.
     /// </summary>
     /// <remarks>
     ///     defaulting to []
@@ -288,15 +269,8 @@ public class BeginRegistrationCeremonyRequest
     public AttestationStatementFormat[]? AttestationFormats { get; }
 
     /// <summary>
-    ///     <para>
-    ///         The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a> MAY use this OPTIONAL member to provide <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-extension-input">client extension inputs</a> requesting additional
-    ///         processing by the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client">client</a> and <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authenticator">authenticator</a>.
-    ///     </para>
-    ///     <para>
-    ///         The extensions framework is defined in <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-extensions">§9 WebAuthn Extensions</a>. Some extensions are defined in
-    ///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-defined-extensions">§10 Defined Extensions</a>; consult the <a href="https://www.iana.org/assignments/webauthn/webauthn.xhtml">IANA "WebAuthn Extension Identifiers" registry</a> established by
-    ///         <a href="https://www.rfc-editor.org/rfc/rfc8809.html">RFC 8809</a> for an up-to-date list of registered <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#webauthn-extensions">WebAuthn Extensions</a>.
-    ///     </para>
+    ///     The <a href="https://www.w3.org/TR/webauthn-3/#relying-party">Relying Party</a> MAY use this OPTIONAL member to provide <a href="https://www.w3.org/TR/webauthn-3/#client-extension-input">client extension inputs</a> requesting additional processing by the
+    ///     <a href="https://www.w3.org/TR/webauthn-3/#client">client</a> and <a href="https://www.w3.org/TR/webauthn-3/#authenticator">authenticator</a>.
     /// </summary>
     public Dictionary<string, JsonElement>? Extensions { get; }
 }
