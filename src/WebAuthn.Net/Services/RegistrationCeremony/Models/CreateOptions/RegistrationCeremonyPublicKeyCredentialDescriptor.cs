@@ -52,15 +52,15 @@ public class RegistrationCeremonyPublicKeyCredentialDescriptor
         ArgumentNullException.ThrowIfNull(id);
         if (id.Length < 16)
         {
-            // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-id
+            // https://www.w3.org/TR/webauthn-3/#credential-id
             // At least 16 bytes that include at least 100 bits of entropy
             throw new ArgumentException($"The minimum length of the {nameof(id)} is 16.", nameof(id));
         }
 
         if (id.Length > 1023)
         {
-            // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-id
-            // At least 16 bytes that include at least 100 bits of entropy
+            // https://www.w3.org/TR/webauthn-3/#credential-id
+            // At most 1023 bytes long
             throw new ArgumentException($"The max length of the {nameof(id)} is 1023.", nameof(id));
         }
 
