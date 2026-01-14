@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using WebAuthn.Net.Models;
+using WebAuthn.Net.Models.Protocol.Enums;
+using WebAuthn.Net.Models.Protocol.RegistrationCeremony.CreateOptions;
 using WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder;
 using WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder.Enums;
 using WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataProvider.Protocol.Json;
+using WebAuthn.Net.Services.Serialization.Cose.Models.Enums;
 using WebAuthn.Net.Services.Serialization.Json;
 using WebAuthn.Net.Services.Static;
 using Version = WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder.Version;
@@ -830,13 +834,53 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             return false;
         }
 
+        PublicKeyCredentialParameters[]? algorithms = null;
+        if (authenticatorGetInfo.Algorithms?.Length > 0)
+        {
+            var resultAccumulator = new List<PublicKeyCredentialParameters>(authenticatorGetInfo.Algorithms.Length);
+            foreach (var algorithm in authenticatorGetInfo.Algorithms)
+            {
+                if (algorithm.Type != "public-key")
+                {
+                    result = null;
+                    return false;
+                }
+
+                var alg = (CoseAlgorithm) algorithm.Alg;
+                if (Enum.IsDefined(alg))
+                {
+                    resultAccumulator.Add(new(PublicKeyCredentialType.PublicKey, alg));
+                }
+            }
+
+            if (resultAccumulator.Count > 0)
+            {
+                algorithms = resultAccumulator.ToArray();
+            }
+        }
+
         result = new(
             authenticatorGetInfo.Versions,
             authenticatorGetInfo.Extensions,
             aaguid,
             authenticatorGetInfo.Options,
             authenticatorGetInfo.MaxMsgSize,
-            authenticatorGetInfo.PinProtocols);
+            authenticatorGetInfo.PinUvAuthProtocols,
+            authenticatorGetInfo.MaxCredentialCountInList,
+            authenticatorGetInfo.MaxCredentialIdLength,
+            authenticatorGetInfo.Transports,
+            algorithms,
+            authenticatorGetInfo.MaxSerializedLargeBlobArray,
+            authenticatorGetInfo.ForcePINChange,
+            authenticatorGetInfo.MinPINLength,
+            authenticatorGetInfo.FirmwareVersion,
+            authenticatorGetInfo.MaxCredBlobLength,
+            authenticatorGetInfo.MaxRPIDsForSetMinPINLength,
+            authenticatorGetInfo.PreferredPlatformUvAttempts,
+            authenticatorGetInfo.UvModality,
+            authenticatorGetInfo.Certifications,
+            authenticatorGetInfo.RemainingDiscoverableCredentials,
+            authenticatorGetInfo.AttestationFormats);
         return true;
     }
 
