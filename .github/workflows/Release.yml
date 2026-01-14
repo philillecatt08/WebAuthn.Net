@@ -21,21 +21,21 @@ jobs:
             -   name: Setup .NET SDK 8.0
                 uses: actions/setup-dotnet@v5
                 with:
-                    dotnet-version: 8.0.402
+                    dotnet-version: 8.0.417
                     source-url: ${{ secrets.NUGET_SOURCE }}
                 env:
                     NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
             -   name: Setup .NET SDK 9.0
                 uses: actions/setup-dotnet@v5
                 with:
-                    dotnet-version: 9.0.308
+                    dotnet-version: 9.0.309
                     source-url: ${{ secrets.NUGET_SOURCE }}
                 env:
                     NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
             -   name: Setup .NET SDK 10.0
                 uses: actions/setup-dotnet@v5
                 with:
-                    dotnet-version: 10.0.101
+                    dotnet-version: 10.0.102
                     source-url: ${{ secrets.NUGET_SOURCE }}
                 env:
                     NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
