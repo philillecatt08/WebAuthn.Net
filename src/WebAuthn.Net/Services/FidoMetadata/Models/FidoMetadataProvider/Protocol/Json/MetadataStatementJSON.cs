@@ -726,8 +726,7 @@ public class MetadataStatementJSON
     ///     unknown the overall claimed cryptographic strength is also unknown.
     /// </summary>
     /// <remarks>
-    ///     See
-    ///     <a href="https://fidoalliance.org/specs/fido-security-requirements/fido-authenticator-security-requirements-v1.4-fd-20201102.html#dfn-overall-claimed-cryptographic-strength">[FIDOAuthenticatorSecurityRequirements], requirement 2.1.4, "Overall Claimed Cryptographic Strength"</a>
+    ///     See <a href="https://fidoalliance.org/specs/fido-security-requirements/fido-authenticator-security-requirements-v1.6-fd-20250312.html#dfn-overall-claimed-security-strength">[FIDOAuthenticatorSecurityRequirements], requirement "Overall Claimed Security Strength"</a>
     /// </remarks>
     [JsonPropertyName("cryptoStrength")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
