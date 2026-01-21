@@ -4,9 +4,7 @@
 ///     Display PNG Characteristics Descriptor
 /// </summary>
 /// <remarks>
-///     <para>
-///         <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.0-ps-20210518.html#displaypngcharacteristicsdescriptor-dictionary">FIDO Metadata Statement - §3.8. DisplayPNGCharacteristicsDescriptor dictionary</a>
-///     </para>
+///     <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1-ps-20250521.html#sctn-type-dpngcd">FIDO Metadata Statement - DisplayPNGCharacteristicsDescriptor dictionary</a>
 /// </remarks>
 public class DisplayPngCharacteristicsDescriptor
 {
