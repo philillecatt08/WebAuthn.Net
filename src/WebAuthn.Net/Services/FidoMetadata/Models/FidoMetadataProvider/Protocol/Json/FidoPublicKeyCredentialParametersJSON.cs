@@ -10,7 +10,7 @@ namespace WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataProvider.Protoco
 public class FidoPublicKeyCredentialParametersJSON
 {
     /// <summary>
-    ///     Constructs <see cref="FidoPublicKeyCredentialParameters" />.
+    ///     Constructs <see cref="FidoPublicKeyCredentialParametersJSON" />.
     /// </summary>
     /// <param name="type">
     ///     This member specifies the type of credential to be created. The value SHOULD be a member of <a href="https://www.w3.org/TR/webauthn-3/#enum-credentialType">PublicKeyCredentialType</a> but
