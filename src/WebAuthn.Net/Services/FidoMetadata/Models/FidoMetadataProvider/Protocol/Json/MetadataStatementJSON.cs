@@ -455,7 +455,7 @@ public class MetadataStatementJSON
     ///         entry, than any firmware version lower (older) than the one specified in the metadata statement is assumed to be vulnerable.
     ///     </para>
     ///     <para>
-    ///         The specified version should equal the value of the 'firmwareVersion' member of the authenticatorGetInfo response. If present, see <a href="https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html">[FIDOCTAP]</a>.
+    ///         The specified version should equal the value of the 'firmwareVersion' member of the authenticatorGetInfo response. If present, see <a href="https://fidoalliance.org/specs/fido-v2.2-ps-20250714/fido-client-to-authenticator-protocol-v2.2-ps-20250714.html">[FIDOCTAP]</a>.
     ///     </para>
     /// </summary>
     [JsonPropertyName("authenticatorVersion")]
@@ -656,7 +656,7 @@ public class MetadataStatementJSON
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         FIDO2 "Security Keys" will typically support "none", or "presence_internal", or "passcode_external" <a href="https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html">[FIDOCTAP]</a>
+    ///         FIDO2 "Security Keys" will typically support "none", or "presence_internal", or "passcode_external" <a href="https://fidoalliance.org/specs/fido-v2.2-ps-20250714/fido-client-to-authenticator-protocol-v2.2-ps-20250714.html">[FIDOCTAP]</a>
     ///     </para>
     ///     <para>The FIDO Client will typically prevent "none" (silent authentication) and "passcode_external" (without "presence_internal") from being used in practice</para>
     /// </remarks>
@@ -748,7 +748,7 @@ public class MetadataStatementJSON
     ///     <para>For FIDO2 the values of attachmentHint MUST correspond to the authenticatorGetInfo.transports if present.</para>
     ///     <para>
     ///         See the field authenticatorGetInfo for FIDO2 authenticators; which expose similar information in the 'transports' member when invoking the 'authenticatorGetInfo' method. See
-    ///         <a href="https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html">[FIDOCTAP]</a>
+    ///         <a href="https://fidoalliance.org/specs/fido-v2.2-ps-20250714/fido-client-to-authenticator-protocol-v2.2-ps-20250714.html">[FIDOCTAP]</a>
     ///     </para>
     /// </remarks>
     [JsonPropertyName("attachmentHint")]
