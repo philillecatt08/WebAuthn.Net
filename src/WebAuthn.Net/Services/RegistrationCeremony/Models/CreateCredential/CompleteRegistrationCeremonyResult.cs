@@ -13,7 +13,7 @@ public class CompleteRegistrationCeremonyResult
     /// <param name="requiringAdditionalAuthenticators">
     ///     <para>Flag referring to <a href="https://www.w3.org/TR/webauthn-3/#sctn-credential-backup">"Credential Backup State"</a>.</para>
     ///     <para>
-    ///         When the <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-be">BE</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags"></a>flag is set to 0, the credential is a
+    ///         When the <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-be">BE</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags">flag</a> is set to 0, the credential is a
     ///         <a href="https://www.w3.org/TR/webauthn-3/#single-device-credential">single-device credential</a> and the <a href="https://www.w3.org/TR/webauthn-3/#generating-authenticator">generating authenticator</a> will never allow the credential to be backed up.
     ///     </para>
     ///     <para>
@@ -35,7 +35,7 @@ public class CompleteRegistrationCeremonyResult
     /// <summary>
     ///     <para>Flag referring to <a href="https://www.w3.org/TR/webauthn-3/#sctn-credential-backup">"Credential Backup State"</a>.</para>
     ///     <para>
-    ///         When the <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-be">BE</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags"></a>flag is set to 0, the credential is a
+    ///         When the <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags-be">BE</a> <a href="https://www.w3.org/TR/webauthn-3/#authdata-flags">flag</a> is set to 0, the credential is a
     ///         <a href="https://www.w3.org/TR/webauthn-3/#single-device-credential">single-device credential</a> and the <a href="https://www.w3.org/TR/webauthn-3/#generating-authenticator">generating authenticator</a> will never allow the credential to be backed up.
     ///     </para>
     ///     <para>
