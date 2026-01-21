@@ -29,7 +29,7 @@ public class MetadataBlobPayloadEntry
     /// </param>
     /// <param name="metadataStatement">The metadataStatement object as defined in <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1-ps-20250521.html#sctn-md-keys">[FIDOMetadataStatement]</a>.</param>
     /// <param name="biometricStatusReports">
-    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v2.0-fd-20201006.html">[FIDOBiometricsRequirements]</a>
+    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v4.1-fd-20250106.html">[FIDOBiometricsRequirements]</a>
     ///     .
     /// </param>
     /// <param name="statusReports">An array of status reports applicable to this authenticator.</param>
@@ -112,7 +112,7 @@ public class MetadataBlobPayloadEntry
     public MetadataStatement? MetadataStatement { get; }
 
     /// <summary>
-    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v2.0-fd-20201006.html">[FIDOBiometricsRequirements]</a>.
+    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v4.1-fd-20250106.html">[FIDOBiometricsRequirements]</a>.
     /// </summary>
     public BiometricStatusReport[]? BiometricStatusReports { get; }
 

@@ -42,7 +42,7 @@ public class MetadataBLOBPayloadEntryJSON
     /// </param>
     /// <param name="metadataStatement">The metadataStatement JSON object as defined in <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1-ps-20250521.html#sctn-md-keys">[FIDOMetadataStatement]</a>.</param>
     /// <param name="biometricStatusReports">
-    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v2.0-fd-20201006.html">[FIDOBiometricsRequirements]</a>
+    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v4.1-fd-20250106.html">[FIDOBiometricsRequirements]</a>
     /// </param>
     /// <param name="statusReports">An array of status reports applicable to this authenticator.</param>
     /// <param name="timeOfLastStatusChange">ISO-8601 formatted date since when the status report array was set to the current value.</param>
@@ -132,7 +132,7 @@ public class MetadataBLOBPayloadEntryJSON
     public MetadataStatementJSON? MetadataStatement { get; }
 
     /// <summary>
-    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v2.0-fd-20201006.html">[FIDOBiometricsRequirements]</a>.
+    ///     Status of the FIDO Biometric Certification of one or more biometric components of the Authenticator <a href="https://fidoalliance.org/specs/biometric/requirements/Biometrics-Requirements-v4.1-fd-20250106.html">[FIDOBiometricsRequirements]</a>.
     /// </summary>
     [JsonPropertyName("biometricStatusReports")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
