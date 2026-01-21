@@ -23,7 +23,7 @@ jobs:
             -   name: Setup .NET SDK 9.0
                 uses: actions/setup-dotnet@v5
                 with:
-                    dotnet-version: 9.0.309
+                    dotnet-version: 9.0.310
                     source-url: ${{ secrets.NUGET_SOURCE }}
                 env:
                     NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
