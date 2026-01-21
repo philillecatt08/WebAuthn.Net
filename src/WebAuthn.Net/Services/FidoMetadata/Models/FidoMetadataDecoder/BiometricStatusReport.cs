@@ -22,7 +22,7 @@ public class BiometricStatusReport
     /// <param name="certificateNumber">The unique identifier for the issued Biometric Certification.</param>
     /// <param name="certificationPolicyVersion">The version of the Biometric Certification Policy the implementation is Certified to, e.g. "1.0.0".</param>
     /// <param name="certificationRequirementsVersion">
-    ///     The version of the Biometric Requirements <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.0-ps-20210518.html#biblio-fidobiometricsrequirements">[FIDOBiometricsRequirements]</a> the implementation is certified to, e.g. "1.0.0".
+    ///     The version of the Biometric Requirements <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#biblio-fidobiometricsrequirements">[FIDOBiometricsRequirements]</a> the implementation is certified to, e.g. "1.0.0".
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="modality" /> doesn't contain a single USER_VERIFY constant</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="modality" /> contains a value that is not defined in <see cref="UserVerificationMethod" /></exception>
