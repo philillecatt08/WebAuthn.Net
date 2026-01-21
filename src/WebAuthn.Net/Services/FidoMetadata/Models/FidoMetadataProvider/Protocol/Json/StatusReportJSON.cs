@@ -197,7 +197,7 @@ public class StatusReportJSON
     ///     In the case the status represents a FIPS certification, this field contains the "physical security level" of the FIPS certification. This entry MUST be present if and only if the
     ///     <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#dom-statusreport-status">"status"</a> entry is one of FIPS140_CERTIFIED_L*. It MUST reflect the physical security level which might deviate from the overall level.
     /// </summary>
-    [JsonPropertyName("fipsRevision")]
+    [JsonPropertyName("fipsPhysicalSecurityLevel")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public ulong? FipsPhysicalSecurityLevel { get; }
 }
