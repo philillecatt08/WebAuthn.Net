@@ -6,9 +6,7 @@ namespace WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataProvider.Protoco
 ///     Version
 /// </summary>
 /// <remarks>
-///     <para>
-///         <a href="https://fidoalliance.org/specs/fido-uaf-v1.2-ps-20201020/fido-uaf-protocol-v1.2-ps-20201020.html#version-interface">FIDO UAF Protocol Specification - §3.1.1 Version Interface</a>
-///     </para>
+///     <a href="https://fidoalliance.org/specs/fido-uaf-v1.2-ps-20201020/fido-uaf-protocol-v1.2-ps-20201020.html#version-interface">FIDO UAF Protocol Specification - Version Interface</a>
 /// </remarks>
 // ReSharper disable once InconsistentNaming
 public class VersionJSON
