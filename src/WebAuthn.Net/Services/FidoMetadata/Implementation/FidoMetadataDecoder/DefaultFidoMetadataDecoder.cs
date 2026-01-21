@@ -988,6 +988,18 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             return false;
         }
 
+        byte[]? batchCertificate = null;
+        if (statusReport.BatchCertificate is not null)
+        {
+            if (!Base64Raw.TryDecode(statusReport.BatchCertificate, out var statusReportBatchCertificate))
+            {
+                result = null;
+                return false;
+            }
+
+            batchCertificate = statusReportBatchCertificate;
+        }
+
         byte[]? certificate = null;
         if (statusReport.Certificate is not null)
         {
@@ -1000,16 +1012,33 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             certificate = statusReportCertificate;
         }
 
+        DateTimeOffset? sunsetDate = null;
+        if (statusReport.SunsetDate is not null)
+        {
+            if (!TryDecodeIso8601Date(statusReport.SunsetDate, out var parsedSunsetDate))
+            {
+                result = null;
+                return false;
+            }
+
+            sunsetDate = parsedSunsetDate.Value;
+        }
+
         result = new(
             status,
             effectiveDate,
             statusReport.AuthenticatorVersion,
+            batchCertificate,
             certificate,
             statusReport.Url,
             statusReport.CertificationDescriptor,
             statusReport.CertificateNumber,
             statusReport.CertificationPolicyVersion,
-            statusReport.CertificationRequirementsVersion);
+            statusReport.CertificationProfiles,
+            statusReport.CertificationRequirementsVersion,
+            sunsetDate,
+            statusReport.FipsRevision,
+            statusReport.FipsPhysicalSecurityLevel);
         return true;
     }
 

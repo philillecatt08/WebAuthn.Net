@@ -129,6 +129,11 @@ public class LocalFilesFidoMetadataProviderForMdsTests : DefaultFidoMetadataProv
                             null,
                             null,
                             null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
                             null)
                     },
                     "2023-11-15",
