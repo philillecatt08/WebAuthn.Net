@@ -159,7 +159,7 @@ public class DefaultPublicKeyCredentialCreationOptionsEncoder
             throw new InvalidOperationException("Failed to encode type in PublicKeyCredentialParameters");
         }
 
-        var alg = (long) pubKeyCredParam.Alg;
+        var alg = (int) pubKeyCredParam.Alg;
         return new(type, alg);
     }
 
@@ -204,7 +204,7 @@ public class DefaultPublicKeyCredentialCreationOptionsEncoder
             }
         }
 
-        return new(id, type, transports);
+        return new(type, id, transports);
     }
 
     private AuthenticatorSelectionCriteriaJSON? EncodeAuthenticatorSelection(AuthenticatorSelectionCriteria? authenticatorSelection)

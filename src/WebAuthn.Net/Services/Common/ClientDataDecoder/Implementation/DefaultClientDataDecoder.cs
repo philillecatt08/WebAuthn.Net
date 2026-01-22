@@ -81,60 +81,41 @@ public class DefaultClientDataDecoder : IClientDataDecoder
         TokenBinding? tokenBinding = null;
         if (clientData.TokenBinding is not null)
         {
-            var tokenBindingResult = ParseTokenBinding(clientData.TokenBinding);
-            if (tokenBindingResult.HasError)
+            if (!TokenBindingStatusSerializer.TryDeserialize(clientData.TokenBinding.Status, out var tokenBindingStatus))
             {
-                Logger.FailedToParseTokenBinding();
+                Logger.FailedToDeserializeTokenBindingStatus();
                 return Result<CollectedClientData>.Fail();
             }
 
-            tokenBinding = tokenBindingResult.Ok;
+            if (tokenBindingStatus == TokenBindingStatus.Present && string.IsNullOrEmpty(clientData.TokenBinding.Id))
+            {
+                Logger.TokenBindingIdIsRequired();
+                return Result<CollectedClientData>.Fail();
+            }
+
+            byte[]? tokenBindingId = null;
+            if (!string.IsNullOrEmpty(clientData.TokenBinding.Id))
+            {
+                if (!Base64Url.TryDecode(clientData.TokenBinding.Id, out var decodedTokenBindingId))
+                {
+                    Logger.FailedToDecodeTokenBindingId();
+                    return Result<CollectedClientData>.Fail();
+                }
+
+                tokenBindingId = decodedTokenBindingId;
+            }
+
+            tokenBinding = new(tokenBindingStatus.Value, tokenBindingId);
         }
 
         var result = new CollectedClientData(
             clientData.Type,
             clientData.Challenge,
             clientData.Origin,
-            clientData.TopOrigin,
             clientData.CrossOrigin,
+            clientData.TopOrigin,
             tokenBinding);
-
         return Result<CollectedClientData>.Success(result);
-    }
-
-    private Result<TokenBinding> ParseTokenBinding(TokenBindingJson tokenBinding)
-    {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if (tokenBinding is null)
-        {
-            return Result<TokenBinding>.Fail();
-        }
-
-        if (string.IsNullOrEmpty(tokenBinding.Status))
-        {
-            return Result<TokenBinding>.Fail();
-        }
-
-        if (!TokenBindingStatusSerializer.TryDeserialize(tokenBinding.Status, out var tokenBindingStatus))
-        {
-            Logger.InvalidTokenBindingStatus();
-            return Result<TokenBinding>.Fail();
-        }
-
-        byte[]? id = null;
-        if (tokenBinding.Id is not null && !Base64Url.TryDecode(tokenBinding.Id, out id))
-        {
-            return Result<TokenBinding>.Fail();
-        }
-
-        if (tokenBindingStatus.Value == TokenBindingStatus.Present && id is null)
-        {
-            Logger.TokenBindingIdIsNullOrEmpty();
-            return Result<TokenBinding>.Fail();
-        }
-
-        var result = new TokenBinding(tokenBindingStatus.Value, id);
-        return Result<TokenBinding>.Success(result);
     }
 }
 
@@ -148,7 +129,6 @@ public static partial class DefaultClientDataDecoderLoggingExtensions
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
         Message = "Failed to deserialize 'clientData'")]
     public static partial void FailedToDeserializeClientData(this ILogger logger);
@@ -158,7 +138,6 @@ public static partial class DefaultClientDataDecoderLoggingExtensions
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
         Message = "'clientData.type' contains an empty string or null")]
     public static partial void ClientDataTypeIsNullOrEmpty(this ILogger logger);
@@ -168,7 +147,6 @@ public static partial class DefaultClientDataDecoderLoggingExtensions
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
         Message = "'clientData.challenge' contains an empty string or null")]
     public static partial void ClientDataChallengeIsNullOrEmpty(this ILogger logger);
@@ -178,38 +156,34 @@ public static partial class DefaultClientDataDecoderLoggingExtensions
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
         Message = "'clientData.origin' contains an empty string or null")]
     public static partial void ClientDataOriginIsNullOrEmpty(this ILogger logger);
 
     /// <summary>
-    ///     Failed to parse 'clientData.tokenBinding'
+    ///     Failed to deserialize 'clientData.tokenBinding.status'
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
-        Message = "Failed to parse 'clientData.tokenBinding'")]
-    public static partial void FailedToParseTokenBinding(this ILogger logger);
+        Message = "Failed to deserialize 'clientData.tokenBinding.status'")]
+    public static partial void FailedToDeserializeTokenBindingStatus(this ILogger logger);
 
     /// <summary>
-    ///     'clientData.tokenBinding.status' contains an invalid value
+    ///     'clientData.tokenBinding.id' is required when 'clientData.tokenBinding.status' is 'present'
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
-        Message = "'clientData.tokenBinding.status' contains an invalid value")]
-    public static partial void InvalidTokenBindingStatus(this ILogger logger);
+        Message = "'clientData.tokenBinding.id' is required when 'clientData.tokenBinding.status' is 'present'")]
+    public static partial void TokenBindingIdIsRequired(this ILogger logger);
 
     /// <summary>
-    ///     'clientData.tokenBinding.status' is 'present', 'clientData.tokenBinding.id' must contain a value
+    ///     Failed to decode 'clientData.tokenBinding.id' from base64url
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
-        Message = "'clientData.tokenBinding.status' is 'present', 'clientData.tokenBinding.id' must contain a value")]
-    public static partial void TokenBindingIdIsNullOrEmpty(this ILogger logger);
+        Message = "Failed to decode 'clientData.tokenBinding.id' from base64url")]
+    public static partial void FailedToDecodeTokenBindingId(this ILogger logger);
 }

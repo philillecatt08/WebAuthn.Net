@@ -26,8 +26,8 @@ public class DefaultNoneAttestationStatementVerifier<TContext> :
         byte[] clientDataHash,
         CancellationToken cancellationToken)
     {
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-none-attestation
-        // §8.7. None Attestation Statement Format
+        // https://www.w3.org/TR/webauthn-3/#sctn-none-attestation
+        // "None Attestation Statement Format"
         var result = new VerifiedAttestationStatement(
             AttestationStatementFormat.None,
             AttestationType.None,

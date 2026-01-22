@@ -94,8 +94,6 @@ public class DefaultAuthenticationCeremonyServiceContextTests : AbstractAuthenti
             null,
             UserVerificationRequirement.Required,
             null,
-            null,
-            null,
             null);
         ContextFactory.ResetMetrics();
         await AuthenticationCeremonyService.BeginCeremonyAsync(
@@ -120,8 +118,6 @@ public class DefaultAuthenticationCeremonyServiceContextTests : AbstractAuthenti
             null,
             UserVerificationRequirement.Required,
             null,
-            null,
-            null,
             null);
         var beginResult = await AuthenticationCeremonyService.BeginCeremonyAsync(
             new DefaultHttpContext(new FeatureCollection()),
@@ -141,8 +137,7 @@ public class DefaultAuthenticationCeremonyServiceContextTests : AbstractAuthenti
                     new("eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiNlN2LTZDNWFyUllVR2lHRk1nUFZYbDFhblZCZUt5aVF2RXFya3FJUHhzYyIsIm9yaWdpbiI6Imh0dHBzOi8vdmFuYnVraW4tcGMubG9jYWwifQ",
                         "wbGR7JKb_3nCDS_Zb_TxyUe4a4rtFXaAsGAUBoQQGPUdAAAAAA",
                         "MEYCIQDebfWSh29hMhN8N6I9LsedJIMKBTLYBykMarfAvNdm0gIhAKRD4M6VApPke-qG3eqms-PrlJ_VTteF6MU9sdlihMBj",
-                        "AAAAAAAAAAAAAAAAAAAAAQ",
-                        null),
+                        "AAAAAAAAAAAAAAAAAAAAAQ"),
                     null,
                     new(),
                     "public-key")),

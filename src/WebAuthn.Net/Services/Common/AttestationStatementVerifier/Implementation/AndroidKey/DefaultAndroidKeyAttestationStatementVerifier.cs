@@ -96,15 +96,15 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
         byte[] clientDataHash,
         CancellationToken cancellationToken)
     {
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-android-key-attestation
-        // §8.4. Android Key Attestation Statement Format
+        // https://www.w3.org/TR/webauthn-3/#sctn-android-key-attestation
+        // Android Key Attestation Statement Format
 
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(attStmt);
         ArgumentNullException.ThrowIfNull(authenticatorData);
         // 1) Verify that 'attStmt' is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
         // 2) Verify that 'sig' is a valid signature over the concatenation of 'authenticatorData' and 'clientDataHash'
-        // using the public key in the first certificate in x5c with the algorithm specified in alg.
+        // using the public key in the first certificate in 'x5c' with the algorithm specified in 'alg'.
         var certificatesToDispose = new List<X509Certificate2>(attStmt.X5C.Length);
         try
         {
@@ -139,13 +139,15 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 3) Verify that the public key in the first certificate in 'x5c' matches the 'credentialPublicKey' in the 'attestedCredentialData' in 'authenticatorData'.
+            // 3) Verify that the public key in the first certificate in 'x5c'
+            // matches the 'credentialPublicKey' in the 'attestedCredentialData' in 'authenticatorData'.
             if (!authenticatorData.AttestedCredentialData.CredentialPublicKey.Matches(credCert))
             {
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 4) Verify that the 'attestationChallenge' field in the attestation certificate extension data is identical to 'clientDataHash'.
+            // 4) Verify that the 'attestationChallenge' field in the attestation certificate extension data
+            // is identical to 'clientDataHash'.
             if (!TryGetKeyDescriptionAttestationExtension(credCert, out var keyDescription))
             {
                 return Result<VerifiedAttestationStatement>.Fail();
@@ -161,13 +163,15 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 5) Verify the following using the appropriate authorization list from the attestation certificate extension data:
+            // 5) Verify the following using the appropriate authorization list
+            // from the attestation certificate extension data:
             if (!VerifyAuthorizationLists(keyDescription))
             {
                 return Result<VerifiedAttestationStatement>.Fail();
             }
 
-            // 6) If successful, return implementation-specific values representing attestation type Basic and attestation trust path 'x5c'.
+            // 6) If successful, return implementation-specific values
+            // representing attestation type Basic and attestation trust path 'x5c'.
             var acceptableTrustAnchorsResult = await GetAcceptableTrustAnchorsAsync(
                 context,
                 credCert,
@@ -199,7 +203,7 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
     /// </summary>
     /// <param name="context">The context in which the WebAuthn operation is performed.</param>
     /// <param name="credCert">X509v3 certificate containing extension data of the Android Key attestation statement</param>
-    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
+    /// <param name="authenticatorData"><a href="https://www.w3.org/TR/webauthn-3/#sctn-authenticator-data">Authenticator data</a> that has <a href="https://www.w3.org/TR/webauthn-3/#authdata-attestedcredentialdata">attestedCredentialData</a>.</param>
     /// <param name="cancellationToken">Cancellation token for an asynchronous operation.</param>
     /// <returns>If the collection of root certificates was successfully formed, the result contains <see cref="UniqueByteArraysCollection" />, otherwise the result indicates that there was an error during the collection formation process.</returns>
     protected virtual async Task<Result<UniqueByteArraysCollection>> GetAcceptableTrustAnchorsAsync(
@@ -317,7 +321,8 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
         }
 
         // 1) The AuthorizationList.allApplications field is not present
-        // on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
+        // on either authorization list (softwareEnforced nor teeEnforced),
+        // since PublicKeyCredential MUST be scoped to the RP ID.
         if (IsAllApplicationsPresent(softwareEnforced))
         {
             return false;
@@ -330,7 +335,7 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
 
         // 2) For the following, use only the teeEnforced authorization list
         // if the RP wants to accept only keys from a trusted execution environment,
-        // otherwise use the union of teeEnforced and softwareEnforced.
+        // otherwise use the union of 'teeEnforced' and 'softwareEnforced'.
         //  - The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
         //  - The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
         var shouldAcceptKeysOnlyFromTrustedExecutionEnvironment = Options.CurrentValue.AttestationStatements.AndroidKey.AcceptKeysOnlyFromTrustedExecutionEnvironment;
@@ -588,8 +593,8 @@ public class DefaultAndroidKeyAttestationStatementVerifier<TContext>
     protected virtual bool TryGetKeyDescriptionAttestationExtension(X509Certificate2 credCert, [NotNullWhen(true)] out Asn1Sequence? keyDescription)
     {
         ArgumentNullException.ThrowIfNull(credCert);
-        // https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#sctn-key-attstn-cert-requirements
-        // §8.4.1. Android Key Attestation Statement Certificate Requirements
+        // https://www.w3.org/TR/webauthn-3/#sctn-key-attstn-cert-requirements
+        // "Android Key Attestation Statement Certificate Requirements"
         // Android Key Attestation attestation certificate's android key attestation certificate extension data
         // is identified by the OID 1.3.6.1.4.1.11129.2.1.17, and its schema is defined in the Android developer documentation.
         foreach (var extension in credCert.Extensions)

@@ -8,7 +8,7 @@ namespace WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder.Enums;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#public-key-representation-formats">FIDO Registry of Predefined Values - §3.6.2 Public Key Representation Formats</a>
+///         <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#public-key-representation-formats">FIDO Registry of Predefined Values - Public Key Representation Formats</a>
 ///     </para>
 /// </remarks>
 [SuppressMessage("ReSharper", "InconsistentNaming")]

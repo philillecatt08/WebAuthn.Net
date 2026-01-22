@@ -56,7 +56,7 @@ public abstract class AbstractAuthenticationCeremonyServiceTests
     {
         ConfigurationManager = new();
         ConfigurationManager.AddInMemoryCollection(GetConfiguration());
-        var webAuthnOptions = ConfigurationManager.Get<WebAuthnOptions>() ?? new WebAuthnOptions();
+        var webAuthnOptions = FakeWebAuthnOptionsFactory.Create(ConfigurationManager);
         var optionsCache = new OptionsCache<WebAuthnOptions>();
         optionsCache.TryAdd(string.Empty, webAuthnOptions);
         Options = new(
@@ -208,9 +208,7 @@ public abstract class AbstractAuthenticationCeremonyServiceTests
             new DefaultEnumMemberAttributeSerializer<PublicKeyCredentialType>(),
             new DefaultEnumMemberAttributeSerializer<AuthenticatorTransport>(),
             new DefaultEnumMemberAttributeSerializer<UserVerificationRequirement>(),
-            new DefaultEnumMemberAttributeSerializer<PublicKeyCredentialHints>(),
-            new DefaultEnumMemberAttributeSerializer<AttestationConveyancePreference>(),
-            new DefaultEnumMemberAttributeSerializer<AttestationStatementFormat>());
+            new DefaultEnumMemberAttributeSerializer<PublicKeyCredentialHints>());
         var authenticationResponseDecoder = new DefaultAuthenticationResponseDecoder(
             new DefaultEnumMemberAttributeSerializer<AuthenticatorAttachment>(),
             new DefaultEnumMemberAttributeSerializer<PublicKeyCredentialType>());
@@ -249,11 +247,7 @@ public abstract class AbstractAuthenticationCeremonyServiceTests
             AuthenticationCeremonyStorage,
             authenticationResponseDecoder,
             clientDataDecoder,
-            attestationObjectDecoder,
             authenticatorDataDecoder,
-            attestationStatementDecoder,
-            attestationStatementVerifier,
-            attestationTrustPathValidator,
             digitalSignatureVerifier,
             AuthenticationCounters,
             NullLogger<DefaultAuthenticationCeremonyService<FakeWebAuthnContext>>.Instance);

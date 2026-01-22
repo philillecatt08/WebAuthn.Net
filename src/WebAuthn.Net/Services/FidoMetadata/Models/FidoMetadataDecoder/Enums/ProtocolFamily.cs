@@ -8,7 +8,7 @@ namespace WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder.Enums;
 /// </summary>
 /// <remarks>
 ///     <para>
-///         <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.0-ps-20210518.html#dom-metadatastatement-protocolfamily">FIDO Metadata Statement - §4. Metadata Keys</a>
+///         <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1-ps-20250521.html#dom-metadatastatement-protocolfamily">FIDO Metadata Statement - Metadata Keys</a>
 ///     </para>
 /// </remarks>
 [SuppressMessage("ReSharper", "InconsistentNaming")]

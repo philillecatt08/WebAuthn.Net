@@ -9,7 +9,7 @@ using WebAuthn.Net.Services.Serialization.Cose.Models.Enums.Extensions;
 namespace WebAuthn.Net.Storage.Credential.Models;
 
 /// <summary>
-///     Model for storing <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-public-key">credential public key</a> in COSE format.
+///     Model for storing <a href="https://www.w3.org/TR/webauthn-3/#credential-public-key">credential public key</a> in COSE format.
 /// </summary>
 public class CredentialPublicKeyRecord
 {
@@ -35,7 +35,7 @@ public class CredentialPublicKeyRecord
         CredentialPublicKeyOkpParametersRecord? okp)
     {
         // kty
-        if (!Enum.IsDefined(typeof(CoseKeyType), kty))
+        if (!Enum.IsDefined(kty))
         {
             throw new InvalidEnumArgumentException(nameof(kty), (int) kty, typeof(CoseKeyType));
         }
@@ -43,7 +43,7 @@ public class CredentialPublicKeyRecord
         Kty = kty;
 
         // alg
-        if (!Enum.IsDefined(typeof(CoseAlgorithm), alg))
+        if (!Enum.IsDefined(alg))
         {
             throw new InvalidEnumArgumentException(nameof(alg), (int) alg, typeof(CoseAlgorithm));
         }
@@ -123,9 +123,9 @@ public class CredentialPublicKeyRecord
     public CredentialPublicKeyOkpParametersRecord? Okp { get; }
 
     /// <summary>
-    ///     If possible, converts the stored <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-public-key">credential public key</a> into a typed representation.
+    ///     If possible, converts the stored <a href="https://www.w3.org/TR/webauthn-3/#credential-public-key">credential public key</a> into a typed representation.
     /// </summary>
-    /// <param name="key">Output parameter. The <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#credential-public-key">credential public key</a> materialized into a typed representation if the method returns <see langword="true" />, otherwise - <see langword="null" />.</param>
+    /// <param name="key">Output parameter. The <a href="https://www.w3.org/TR/webauthn-3/#credential-public-key">credential public key</a> materialized into a typed representation if the method returns <see langword="true" />, otherwise - <see langword="null" />.</param>
     /// <returns><see langword="true" /> if it was possible to convert the stored credential public key into a typed representation, otherwise - <see langword="false" />.</returns>
     public virtual bool TryToCoseKey([NotNullWhen(true)] out AbstractCoseKey? key)
     {

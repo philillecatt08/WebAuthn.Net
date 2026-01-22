@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using WebAuthn.Net.Models;
@@ -365,6 +366,7 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             metadataStatement.Aaid,
             aaguid,
             attestationCertificateKeyIdentifiers,
+            metadataStatement.FriendlyNames,
             metadataStatement.Description,
             metadataStatement.AlternativeDescriptions,
             metadataStatement.AuthenticatorVersion,
@@ -387,8 +389,14 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             attestationRootCertificates,
             ecdaaTrustAnchors,
             metadataStatement.Icon,
+            metadataStatement.IconDark,
+            metadataStatement.ProviderLogoLight,
+            metadataStatement.ProviderLogoDark,
             supportedExtensions,
-            authenticatorGetInfo);
+            metadataStatement.KeyScope,
+            metadataStatement.MultiDeviceCredentialSupport,
+            authenticatorGetInfo,
+            metadataStatement.CxpConfigUrl);
         return true;
     }
 
@@ -567,6 +575,7 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
         result = new(
             baDesc.SelfAttestedFRR,
             baDesc.SelfAttestedFAR,
+            baDesc.IaparThreshold,
             baDesc.MaxTemplates,
             baDesc.MaxRetries,
             baDesc.BlockSlowdown);
@@ -830,13 +839,53 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             return false;
         }
 
+        FidoPublicKeyCredentialParameters[]? algorithms = null;
+        if (authenticatorGetInfo.Algorithms?.Length > 0)
+        {
+            var resultAccumulator = new List<FidoPublicKeyCredentialParameters>(authenticatorGetInfo.Algorithms.Length);
+            foreach (var algorithm in authenticatorGetInfo.Algorithms)
+            {
+                // https://www.w3.org/TR/webauthn-3/#enum-credentialType
+                // enum PublicKeyCredentialType {
+                //     "public-key"
+                // };
+                if (algorithm.Type != "public-key")
+                {
+                    result = null;
+                    return false;
+                }
+
+                resultAccumulator.Add(new(algorithm.Type, algorithm.Alg));
+            }
+
+            if (resultAccumulator.Count > 0)
+            {
+                algorithms = resultAccumulator.ToArray();
+            }
+        }
+
         result = new(
             authenticatorGetInfo.Versions,
             authenticatorGetInfo.Extensions,
             aaguid,
             authenticatorGetInfo.Options,
             authenticatorGetInfo.MaxMsgSize,
-            authenticatorGetInfo.PinProtocols);
+            authenticatorGetInfo.PinUvAuthProtocols,
+            authenticatorGetInfo.MaxCredentialCountInList,
+            authenticatorGetInfo.MaxCredentialIdLength,
+            authenticatorGetInfo.Transports,
+            algorithms,
+            authenticatorGetInfo.MaxSerializedLargeBlobArray,
+            authenticatorGetInfo.ForcePINChange,
+            authenticatorGetInfo.MinPINLength,
+            authenticatorGetInfo.FirmwareVersion,
+            authenticatorGetInfo.MaxCredBlobLength,
+            authenticatorGetInfo.MaxRPIDsForSetMinPINLength,
+            authenticatorGetInfo.PreferredPlatformUvAttempts,
+            authenticatorGetInfo.UvModality,
+            authenticatorGetInfo.Certifications,
+            authenticatorGetInfo.RemainingDiscoverableCredentials,
+            authenticatorGetInfo.AttestationFormats);
         return true;
     }
 
@@ -943,6 +992,18 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             return false;
         }
 
+        byte[]? batchCertificate = null;
+        if (statusReport.BatchCertificate is not null)
+        {
+            if (!Base64Raw.TryDecode(statusReport.BatchCertificate, out var statusReportBatchCertificate))
+            {
+                result = null;
+                return false;
+            }
+
+            batchCertificate = statusReportBatchCertificate;
+        }
+
         byte[]? certificate = null;
         if (statusReport.Certificate is not null)
         {
@@ -955,16 +1016,33 @@ public class DefaultFidoMetadataDecoder : IFidoMetadataDecoder
             certificate = statusReportCertificate;
         }
 
+        DateTimeOffset? sunsetDate = null;
+        if (statusReport.SunsetDate is not null)
+        {
+            if (!TryDecodeIso8601Date(statusReport.SunsetDate, out var parsedSunsetDate))
+            {
+                result = null;
+                return false;
+            }
+
+            sunsetDate = parsedSunsetDate.Value;
+        }
+
         result = new(
             status,
             effectiveDate,
             statusReport.AuthenticatorVersion,
+            batchCertificate,
             certificate,
             statusReport.Url,
             statusReport.CertificationDescriptor,
             statusReport.CertificateNumber,
             statusReport.CertificationPolicyVersion,
-            statusReport.CertificationRequirementsVersion);
+            statusReport.CertificationProfiles,
+            statusReport.CertificationRequirementsVersion,
+            sunsetDate,
+            statusReport.FipsRevision,
+            statusReport.FipsPhysicalSecurityLevel);
         return true;
     }
 

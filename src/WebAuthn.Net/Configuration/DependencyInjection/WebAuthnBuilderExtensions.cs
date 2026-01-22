@@ -338,7 +338,6 @@ public static class WebAuthnBuilderExtensions
         builder.Services.TryAddSingleton<ICborDeserializer, DefaultCborDeserializer>();
         builder.Services.TryAddSingleton<ISafeJsonSerializer, DefaultSafeJsonSerializer>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<AttestationStatementFormat>, DefaultEnumMemberAttributeSerializer<AttestationStatementFormat>>();
-        builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<TokenBindingStatus>, DefaultEnumMemberAttributeSerializer<TokenBindingStatus>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<UserVerificationMethod>, DefaultEnumMemberAttributeSerializer<UserVerificationMethod>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<ProtocolFamily>, DefaultEnumMemberAttributeSerializer<ProtocolFamily>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<AuthenticationAlgorithm>, DefaultEnumMemberAttributeSerializer<AuthenticationAlgorithm>>();
@@ -355,6 +354,7 @@ public static class WebAuthnBuilderExtensions
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<PublicKeyCredentialHints>, DefaultEnumMemberAttributeSerializer<PublicKeyCredentialHints>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<AttestationConveyancePreference>, DefaultEnumMemberAttributeSerializer<AttestationConveyancePreference>>();
         builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<ResidentKeyRequirement>, DefaultEnumMemberAttributeSerializer<ResidentKeyRequirement>>();
+        builder.Services.TryAddSingleton<IEnumMemberAttributeSerializer<TokenBindingStatus>, DefaultEnumMemberAttributeSerializer<TokenBindingStatus>>();
         return builder;
     }
 

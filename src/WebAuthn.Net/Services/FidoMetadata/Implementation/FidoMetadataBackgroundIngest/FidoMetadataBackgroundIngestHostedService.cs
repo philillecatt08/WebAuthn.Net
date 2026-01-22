@@ -97,7 +97,7 @@ public class FidoMetadataBackgroundIngestHostedService : IHostedService, IDispos
     /// <inheritdoc />
     public virtual async Task StopAsync(CancellationToken cancellationToken)
     {
-        // Stop called without start
+        // Stop called without a start
         if (PeriodicBackgroundUpdateTask == null)
         {
             return;
@@ -107,14 +107,10 @@ public class FidoMetadataBackgroundIngestHostedService : IHostedService, IDispos
         {
             // Signal cancellation to the executing method
             var stoppingCts = StoppingCts;
-#if NET6_0
-            stoppingCts?.Cancel();
-#else
             if (stoppingCts is not null)
             {
                 await stoppingCts.CancelAsync();
             }
-#endif
         }
         finally
         {
@@ -130,13 +126,13 @@ public class FidoMetadataBackgroundIngestHostedService : IHostedService, IDispos
     /// <returns>An asynchronous task that performs metadata update in the background.</returns>
     protected virtual Task StartBackgroundIngestAsync(CancellationToken cancellationToken)
     {
-        // Create linked token to allow cancelling executing task from provided token
+        // Create a linked token to allow cancelling an executing task from the provided token
         StoppingCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // Store the task we're executing
         PeriodicBackgroundUpdateTask = BackgroundIngestAsync(StoppingCts.Token);
 
-        // If the task is completed then return it, this will bubble cancellation and failure to the caller
+        // If the task is completed, then return it. This will bubble cancellation and failure to the caller
         if (PeriodicBackgroundUpdateTask.IsCompleted)
         {
             return PeriodicBackgroundUpdateTask;
@@ -219,7 +215,6 @@ public static partial class FidoMetadataBackgroundIngestHostedServiceLoggingExte
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
         Message = "Failed to download metadata from the FIDO Metadata Service")]
     public static partial void FailedToDownload(this ILogger logger);
@@ -229,7 +224,6 @@ public static partial class FidoMetadataBackgroundIngestHostedServiceLoggingExte
     /// </summary>
     /// <param name="logger">Logger.</param>
     [LoggerMessage(
-        EventId = default,
         Level = LogLevel.Warning,
         Message = "Failed to decode data downloaded from the FIDO Metadata Service")]
     public static partial void FailedToDecode(this ILogger logger);

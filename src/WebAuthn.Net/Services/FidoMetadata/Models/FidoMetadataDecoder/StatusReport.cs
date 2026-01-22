@@ -4,12 +4,10 @@ using WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder.Enums;
 namespace WebAuthn.Net.Services.FidoMetadata.Models.FidoMetadataDecoder;
 
 /// <summary>
-///     StatusReport dictionary
+///     Status Report
 /// </summary>
 /// <remarks>
-///     <para>
-///         <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.0-ps-20210518.html#statusreport-dictionary">FIDO Metadata Service - §3.1.3. StatusReport dictionary</a>
-///     </para>
+///     <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#sctn-stat-rep">FIDO Metadata Service - StatusReport dictionary</a>
 /// </remarks>
 public class StatusReport
 {
@@ -18,29 +16,48 @@ public class StatusReport
     /// </summary>
     /// <param name="status">Status of the authenticator. Additional fields MAY be set depending on this value.</param>
     /// <param name="effectiveDate">Date since when the status code was set, if applicable. If no date is given, the status is assumed to be effective while present.</param>
-    /// <param name="authenticatorVersion">The authenticatorVersion that this status report relates to. In the case of FIDO_CERTIFIED* status values, the status applies to higher authenticatorVersions until there is a new statusReport.</param>
-    /// <param name="certificate">Certificate value related to the current status, if applicable.</param>
+    /// <param name="authenticatorVersion">The "authenticatorVersion" (firmware version) that this status report relates to. In the case of FIDO_CERTIFIED* status values, the status applies to higher authenticatorVersions until there is a new statusReport.</param>
+    /// <param name="batchCertificate">DER <a href="https://www.itu.int/rec/T-REC-X.690-200811-S">[ITU-X690-2008]</a> PKIX certificate value related to the current status, if applicable.</param>
+    /// <param name="certificate">DER <a href="https://www.itu.int/rec/T-REC-X.690-200811-S">[ITU-X690-2008]</a> PKIX certificate value related to the current status, if applicable. This field will typically not be present if field "batchCertificate" is present.</param>
     /// <param name="url">HTTPS URL where additional information may be found related to the current status, if applicable.</param>
     /// <param name="certificationDescriptor">Describes the externally visible aspects of the Authenticator Certification evaluation.</param>
     /// <param name="certificateNumber">The unique identifier for the issued Certification.</param>
     /// <param name="certificationPolicyVersion">The version of the Authenticator Certification Policy the implementation is Certified to, e.g. "1.0.0".</param>
+    /// <param name="certificationProfiles">
+    ///     Each entry represents a supported certification profile. The supported profiles are defined in the active version of the "Authenticator Certification Policy" document. At the time of writing this specification, the supported profiles are:
+    ///     "consumer" and "enterprise".
+    /// </param>
     /// <param name="certificationRequirementsVersion">
-    ///     The Document Version of the Authenticator Security Requirements (DV) <a href="https://fidoalliance.org/specs/fido-security-requirements/fido-authenticator-security-requirements-v1.4-fd-20201102.html">[FIDOAuthenticatorSecurityRequirements]</a> the implementation is certified
+    ///     The Document Version of the Authenticator Security Requirements (DV) <a href="https://fidoalliance.org/specs/fido-security-requirements/fido-authenticator-security-requirements-v1.6-fd-20250312.html">[FIDOAuthenticatorSecurityRequirements]</a> the implementation is certified
     ///     to, e.g. "1.2.0".
+    /// </param>
+    /// <param name="sunsetDate">Date since when the status wil expire, if applicable. If no date is given, the status is assumed to not have a scheduled expiry.</param>
+    /// <param name="fipsRevision">
+    ///     The revision number of the FIPS 140 specification, e.g. "3" in the case of FIPS 140-3. This entry MUST be present if and only if the
+    ///     <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#dom-statusreport-status">"status"</a> entry is one of FIPS140_CERTIFIED_L*.
+    /// </param>
+    /// <param name="fipsPhysicalSecurityLevel">
+    ///     In the case the status represents a FIPS certification, this field contains the "physical security level" of the FIPS certification. This entry MUST be present if and only if the
+    ///     <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#dom-statusreport-status">"status"</a> entry is one of FIPS140_CERTIFIED_L*. It MUST reflect the physical security level which might deviate from the overall level.
     /// </param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="status" /> contains a value that is not defined in <see cref="AuthenticatorStatus" /></exception>
     public StatusReport(
         AuthenticatorStatus status,
         DateTimeOffset? effectiveDate,
         ulong? authenticatorVersion,
+        byte[]? batchCertificate,
         byte[]? certificate,
         string? url,
         string? certificationDescriptor,
         string? certificateNumber,
         string? certificationPolicyVersion,
-        string? certificationRequirementsVersion)
+        string[]? certificationProfiles,
+        string? certificationRequirementsVersion,
+        DateTimeOffset? sunsetDate,
+        ulong? fipsRevision,
+        ulong? fipsPhysicalSecurityLevel)
     {
-        if (!Enum.IsDefined(typeof(AuthenticatorStatus), status))
+        if (!Enum.IsDefined(status))
         {
             throw new ArgumentOutOfRangeException(nameof(status), "Value should be defined in the AuthenticatorStatus enum.");
         }
@@ -48,12 +65,17 @@ public class StatusReport
         Status = status;
         EffectiveDate = effectiveDate;
         AuthenticatorVersion = authenticatorVersion;
+        BatchCertificate = batchCertificate;
         Certificate = certificate;
         Url = url;
         CertificationDescriptor = certificationDescriptor;
         CertificateNumber = certificateNumber;
         CertificationPolicyVersion = certificationPolicyVersion;
+        CertificationProfiles = certificationProfiles;
         CertificationRequirementsVersion = certificationRequirementsVersion;
+        SunsetDate = sunsetDate;
+        FipsRevision = fipsRevision;
+        FipsPhysicalSecurityLevel = fipsPhysicalSecurityLevel;
     }
 
     /// <summary>
@@ -67,19 +89,30 @@ public class StatusReport
     public DateTimeOffset? EffectiveDate { get; }
 
     /// <summary>
-    ///     The authenticatorVersion that this status report relates to. In the case of FIDO_CERTIFIED* status values, the status applies to higher authenticatorVersions until there is a new statusReport.
+    ///     The "authenticatorVersion" (firmware version) that this status report relates to. In the case of FIDO_CERTIFIED* status values, the status applies to higher authenticatorVersions until there is a new statusReport.
     /// </summary>
     /// <remarks>
-    ///     For example, if the status would be USER_VERIFICATION_BYPASS, the authenticatorVersion indicates the vulnerable firmware version of the authenticator. Similarly, if the status would be UPDATE_AVAILABLE, the authenticatorVersion indicates the updated firmware version that is
-    ///     available now. If the status would be SELF_ASSERTION_SUBMITTED, the authenticatorVersion indicates the firmware version that the self assertion was based on.
+    ///     <para>
+    ///         For example, if the status would be USER_VERIFICATION_BYPASS, the authenticatorVersion indicates the vulnerable firmware version of the authenticator. Similarly, if the status would be UPDATE_AVAILABLE, the authenticatorVersion indicates the updated firmware version
+    ///         that is available now. If the status would be SELF_ASSERTION_SUBMITTED, the authenticatorVersion indicates the firmware version that the self assertion was based on.
+    ///     </para>
+    ///     <para>An authenticator’s current firmware version can be found in the attestation certificate in extension id-fido-gen-ce-fw-version (OID 1.3.6.1.4.1.45724.1.1.5).</para>
     /// </remarks>
     public ulong? AuthenticatorVersion { get; }
 
     /// <summary>
-    ///     Certificate value related to the current status, if applicable.
+    ///     DER <a href="https://www.itu.int/rec/T-REC-X.690-200811-S">[ITU-X690-2008]</a> PKIX certificate value related to the current status, if applicable.
     /// </summary>
     /// <remarks>
-    ///     As an example, this could be an Attestation Root Certificate (see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.0-ps-20210518.html">[FIDOMetadataStatement]</a>) related to a set of compromised authenticators (ATTESTATION_KEY_COMPROMISE).
+    ///     As an example, this could be an Batch Attestation Certificate (see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1-ps-20250521.html">[FIDOMetadataStatement]</a>) related to a set of compromised authenticators (USER_KEY_REMOTE_COMPROMISE).
+    /// </remarks>
+    public byte[]? BatchCertificate { get; }
+
+    /// <summary>
+    ///     DER <a href="https://www.itu.int/rec/T-REC-X.690-200811-S">[ITU-X690-2008]</a> PKIX certificate value related to the current status, if applicable. This field will typically not be present if field "batchCertificate" is present.
+    /// </summary>
+    /// <remarks>
+    ///     As an example, this could be an Attestation Root Certificate (see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1-ps-20250521.html">[FIDOMetadataStatement]</a>) related to a set of compromised authenticators (ATTESTATION_KEY_COMPROMISE).
     /// </remarks>
     public byte[]? Certificate { get; }
 
@@ -110,8 +143,30 @@ public class StatusReport
     public string? CertificationPolicyVersion { get; }
 
     /// <summary>
-    ///     The Document Version of the Authenticator Security Requirements (DV) <a href="https://fidoalliance.org/specs/fido-security-requirements/fido-authenticator-security-requirements-v1.4-fd-20201102.html">[FIDOAuthenticatorSecurityRequirements]</a> the implementation is certified
+    ///     Each entry represents a supported certification profile. The supported profiles are defined in the active version of the "Authenticator Certification Policy" document. At the time of writing this specification, the supported profiles are: "consumer" and "enterprise".
+    /// </summary>
+    public string[]? CertificationProfiles { get; }
+
+    /// <summary>
+    ///     The Document Version of the Authenticator Security Requirements (DV) <a href="https://fidoalliance.org/specs/fido-security-requirements/fido-authenticator-security-requirements-v1.6-fd-20250312.html">[FIDOAuthenticatorSecurityRequirements]</a> the implementation is certified
     ///     to, e.g. "1.2.0".
     /// </summary>
     public string? CertificationRequirementsVersion { get; }
+
+    /// <summary>
+    ///     Date since when the status wil expire, if applicable. If no date is given, the status is assumed to not have a scheduled expiry.
+    /// </summary>
+    public DateTimeOffset? SunsetDate { get; }
+
+    /// <summary>
+    ///     The revision number of the FIPS 140 specification, e.g. "3" in the case of FIPS 140-3. This entry MUST be present if and only if the <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#dom-statusreport-status">"status"</a> entry is one of
+    ///     FIPS140_CERTIFIED_L*.
+    /// </summary>
+    public ulong? FipsRevision { get; }
+
+    /// <summary>
+    ///     In the case the status represents a FIPS certification, this field contains the "physical security level" of the FIPS certification. This entry MUST be present if and only if the
+    ///     <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1-ps-20250521.html#dom-statusreport-status">"status"</a> entry is one of FIPS140_CERTIFIED_L*. It MUST reflect the physical security level which might deviate from the overall level.
+    /// </summary>
+    public ulong? FipsPhysicalSecurityLevel { get; }
 }

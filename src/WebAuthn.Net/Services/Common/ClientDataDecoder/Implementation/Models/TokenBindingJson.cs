@@ -4,12 +4,10 @@ using System.Text.Json.Serialization;
 namespace WebAuthn.Net.Services.Common.ClientDataDecoder.Implementation.Models;
 
 /// <summary>
-///     Token Binding dictionary
+///     Information about the state of the Token Binding protocol.
 /// </summary>
 /// <remarks>
-///     <para>
-///         <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dictdef-tokenbinding">Web Authentication: An API for accessing Public Key Credentials Level 3 - §5.8.1. Client Data Used in WebAuthn Signatures (dictionary TokenBinding)</a>
-///     </para>
+///     <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-tokenbinding">Web Authentication: An API for accessing Public Key Credentials Level 3 - Client Data Used in WebAuthn Signatures</a>
 /// </remarks>
 public class TokenBindingJson
 {
@@ -17,30 +15,10 @@ public class TokenBindingJson
     ///     Constructs <see cref="TokenBindingJson" />.
     /// </summary>
     /// <param name="status">
-    ///     <para>
-    ///         This member SHOULD be a member of <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#enumdef-tokenbindingstatus">TokenBindingStatus</a> but <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-platform">client platforms</a> MUST ignore unknown
-    ///         values, treating an unknown value as if the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#collectedclientdata-tokenbinding">tokenBinding</a> <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>. When known, this member is one of the
-    ///         following:
-    ///         <list type="table">
-    ///             <item>
-    ///                 <term>supported</term>
-    ///                 <description>Indicates the client supports token binding, but it was not negotiated when communicating with the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>.</description>
-    ///             </item>
-    ///             <item>
-    ///                 <term>present</term>
-    ///                 <description>
-    ///                     Indicates token binding was used when communicating with the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>. In this case, the
-    ///                     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-tokenbinding-id">id</a> member MUST be present.
-    ///                 </description>
-    ///             </item>
-    ///         </list>
-    ///     </para>
+    ///     This member SHOULD be a member of <a href="https://www.w3.org/TR/webauthn-3/#enumdef-tokenbindingstatus">TokenBindingStatus</a> but <a href="https://www.w3.org/TR/webauthn-3/#client-platform">client platforms</a> MUST ignore unknown values, treating an
+    ///     unknown value as if the <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-tokenbinding">"tokenBinding"</a> <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>.
     /// </param>
-    /// <param name="id">
-    ///     This member MUST be present if <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-tokenbinding-status">status</a> is <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-tokenbindingstatus-present">"present"</a>, and MUST be a base64url encoding of
-    ///     the <a href="https://www.rfc-editor.org/rfc/rfc8471.html#section-3.2">Token Binding ID</a> that was used when communicating with the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>.
-    /// </param>
-    [JsonConstructor]
+    /// <param name="id">This member MUST be present if status is present, and MUST be a base64url encoding of the Token Binding ID that was used when communicating with the Relying Party.</param>
     public TokenBindingJson(string status, string? id)
     {
         Status = status;
@@ -48,37 +26,17 @@ public class TokenBindingJson
     }
 
     /// <summary>
-    ///     <para>
-    ///         This member SHOULD be a member of <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#enumdef-tokenbindingstatus">TokenBindingStatus</a> but <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-platform">client platforms</a> MUST ignore unknown
-    ///         values, treating an unknown value as if the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#collectedclientdata-tokenbinding">tokenBinding</a> <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>. When known, this member is one of the
-    ///         following:
-    ///         <list type="table">
-    ///             <item>
-    ///                 <term>supported</term>
-    ///                 <description>Indicates the client supports token binding, but it was not negotiated when communicating with the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>.</description>
-    ///             </item>
-    ///             <item>
-    ///                 <term>present</term>
-    ///                 <description>
-    ///                     Indicates token binding was used when communicating with the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>. In this case, the
-    ///                     <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-tokenbinding-id">id</a> member MUST be present.
-    ///                 </description>
-    ///             </item>
-    ///         </list>
-    ///     </para>
+    ///     This member SHOULD be a member of <a href="https://www.w3.org/TR/webauthn-3/#enumdef-tokenbindingstatus">TokenBindingStatus</a> but <a href="https://www.w3.org/TR/webauthn-3/#client-platform">client platforms</a> MUST ignore unknown values, treating an unknown value as if
+    ///     the <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-tokenbinding">"tokenBinding"</a> <a href="https://infra.spec.whatwg.org/#map-exists">member does not exist</a>.
     /// </summary>
     [JsonPropertyName("status")]
-    [Required]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    [Required]
     public string Status { get; }
 
     /// <summary>
-    ///     This member MUST be present if <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-tokenbinding-status">status</a> is <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#dom-tokenbindingstatus-present">"present"</a>, and MUST be a base64url encoding of
-    ///     the <a href="https://www.rfc-editor.org/rfc/rfc8471.html#section-3.2">Token Binding ID</a> that was used when communicating with the <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#relying-party">Relying Party</a>.
+    ///     This member MUST be present if status is present, and MUST be a base64url encoding of the Token Binding ID that was used when communicating with the Relying Party.
     /// </summary>
-    /// <remarks>
-    ///     Obtaining a <a href="https://www.rfc-editor.org/rfc/rfc8471.html#section-3.2">Token Binding ID</a> is a <a href="https://www.w3.org/TR/2023/WD-webauthn-3-20230927/#client-platform">client platform</a>-specific operation.
-    /// </remarks>
     [JsonPropertyName("id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string? Id { get; }
